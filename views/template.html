@@ -1,34 +1,119 @@
-
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>User Information PDF</title>
-</head>
-<body>
-  <h3>INVOICELY Information</h3>
-  <div>
-    <h2>To</h2>
-    <p><strong>Username:</strong> <span id="firstName"></span></p>
-    <p><strong>Email:</strong> <span id="email"></span></p>
-    <p><strong>Phone:</strong> <span id="phone"></span></p>
-    <p><strong>City:</strong> <span id="city"></span></p>
-    <p><strong>State:</strong> <span id="state"></span></p>
-    <p><strong>Country:</strong> <span id="country"></span></p>
-    <p><strong>ZipCode:</strong> <span id="zipCode"></span></p>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Information PDF</title>
+  </head>
+  <body>
+ <div style="margin: 40px;">
+  <h3>INVOICE</h3>
+  <p><span id="description"></span></p>
+  <div style="display: flex; justify-content: space-between; padding: 10px">
+    <div style="display: flex; justify-content: space-between">
+      <div style="margin-right: -10px; display: flex; flex-direction: column">
+        <p><strong>From</strong></p>
+        <p><span id="firstNameFrom"></span></p>
+        <p><span id="address1From"></span></p>
+        <div style="display: flex; align-items: center">
+          <p style="margin-right: 5px"><span id="postalCodeFrom"></span></p>
+          <p><span id="cityFrom"></span></p>
+        </div>
+        <p><span id="countryFrom"></span></p>
+      </div>
+
+      <div style="margin-left: 180px">
+        <p><strong>Invoice No.:</strong> <span id="invoiceNumber"></p>
+        <p><strong>Date:</strong>  <span id="date"></p>
+          </div>
+    </div>
   </div>
 
-  <div>
-    <h2>From</h2>
-    <p><strong>Username:</strong> <span id="firstName"></span></p>
-    <p><strong>Email:</strong> <span id="email"></span></p>
-    <p><strong>Phone:</strong> <span id="phone"></span></p>
-    <p><strong>City:</strong> <span id="city"></span></p>
-    <p><strong>State:</strong> <span id="state"></span></p>
-    <p><strong>Country:</strong> <span id="country"></span></p>
-    <p><strong>ZipCode:</strong> <span id="zipCode"></span></p>
+  <div style="display: flex; justify-content: space-between; padding: 10px">
+    <div
+      style="
+        display: flex;
+        justify-content: space-between;
+        margin-right: -10px;
+      "
+    >
+      <div>
+        <p><strong>To</strong></p>
+        <p><span id="firstNameTo"></span></p>
+        <p> <span id="address1To"></span></p>
+        <div style="display: flex; align-items: center">
+          <p style="margin-right: 5px"><span id="postalCodeTo"></span></p>
+          <p><span id="cityTo"></span></p>
+        </div>
+        <p> <span id="countryTo"></span></p>
+
+      </div>
+      <div style="margin-left: 150px">
+        <p><strong>Purchase Order Number:</strong>  <span id="purchaseOrderNumber"></p>
+        <p><strong>Invoice Due.:</strong><span id="invoiceDueDate"> </p>
+      </div>
+    </div>
   </div>
-</body>
+
+  <hr />
+  <div
+    style="display: flex; justify-content: space-between; align-items: center"
+  >
+  <div style="margin-right: 20px">
+    <p><strong>Description:</strong></p>
+    <p><span id="descriptionAray"></span></p>
+  </div>
+  
+    <div style="margin-right: 20px">
+      <p><strong>Quantity</strong></p>
+      <p><span id="quantity"></span></p>
+
+    </div>
+    <div style="margin-right: 20px">
+      <p><strong>Rate</strong></p>
+      <p><span id="rate"></span></p>
+
+    </div>
+    <div>
+      <p><strong>Amount</strong></p>
+      <p><span id="amount"></span></p>
+
+    </div>
+  </div>
+  <hr />
+
+  <div
+    style="display: flex; justify-content: space-between; margin-left: 200px"
+  >
+  <div style="text-align: left">
+    <p><strong>Subtotal:</strong></p>
+    <p><strong>Total:</strong></p>
+    <p><strong>Paid to Date:</strong></p>
+    <p style="text-align: center; background-color: gray; padding: 10px">
+      Balance
+    </p>
+  </div>
+  
+  <div style="text-align: right">
+    <p><span id="subtotal"></span></p>
+    <p><span id="total"></span></p>
+    <p><span id="paidToDate"></span></p>
+    <p><span id="balance"></span></p>
+  </div>
+  
+  </div>
+   <div>
+    <p><strong>Invoice Notes</strong></p>
+    <p><span id="notes"></span></p>
+   </div>
+   <hr />
+   <div style="display: flex; justify-content: space-between">
+     <p><strong>Email:</strong>   <p><span id="email"></span></p></p>
+     <p style="margin-left: auto"><img src="" alt="Not Available Now" /></p>
+   </div>
+  </div>
+
+ </div>
+  </body>
 </html>
 

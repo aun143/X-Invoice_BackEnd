@@ -1,215 +1,171 @@
-// const puppeteer = require("puppeteer");
-// const { ClientDetail } = require("../Models/clinetModel");
-
-// const path = require("path");
-// const axios = require("axios");
-
-// const fetchData = async () => {
-//   try {
-//     const userData = await ClientDetail.find();
-//     // const records = await BusinessProfileIndivil.find();
-
-//     return { userData };
-//   } catch (error) {
-//     ////console.error("Error fetching user data:", error);
-//     throw error;
-//   }
-// };
-
-// const generatePDF = async (req, res) => {
-//   try {
-//     const { userData } = await fetchData();
-//     const browser = await puppeteer.launch();
-
-//     // Create an array to store PDF buffers
-//     const pdfBuffers = [];
-
-//     for (const record of userData) {
-//       const page = await browser.newPage();
-
-//       const htmlPath = path.join(__dirname, "../views/template.html");
-//       const content = await page.setContent(
-//         require("fs").readFileSync(htmlPath, "utf8")
-//       );
-
-//       await page.evaluate((record) => {
-//         document.getElementById("firstName").innerText = record.firstName || "";
-//         document.getElementById("email").innerText = record.email || "";
-//         document.getElementById("phone").innerText = record.phone || "";
-//         document.getElementById("zipCode").innerText = record.zipCode || "";
-//         document.getElementById("country").innerText = record.country || "";
-//         document.getElementById("state").innerText = record.state || "";
-//         document.getElementById("city").innerText = record.city || "";
-//       }, record);
-
-//       ////console.log("Record>>>", record);
-
-//       const pdf = await page.pdf({ format: "A4" });
-
-//       // Push each PDF buffer into the array
-//       pdfBuffers.push(pdf);
-//     }
-
-//     // Send all PDF buffers at once
-//     res.header("Content-Type", "application/pdf");
-//     pdfBuffers.forEach(pdfBuffer => res.write(pdfBuffer));
-//     res.end();
-
-//     await browser.close();
-//   } catch (error) {
-//     ////console.error("Error generating PDF:", error);
-//     res.status(500).send("Internal Server Error");
-//   }
-// };
-
-// module.exports = {
-//   generatePDF,
-// };
-
-
 const puppeteer = require("puppeteer");
 const { ClientDetail } = require("../Models/clinetModel");
+const { BusinessProfile } = require("../Models/businessProfile");
+const { InvoiceDetail } = require("../Models/invoiceModel");
+
 const path = require("path");
 const axios = require("axios");
+const { log } = require("console");
 
-const fetchData = async (filter = {}) => {
+const fetchData = async (
+  userFilter = {},
+  businessFilter = {},
+  invoiceFilter = {}
+) => {
   try {
-    const userData = await ClientDetail.find(filter);
+    const userData = await ClientDetail.find(userFilter);
+    const businessData = await BusinessProfile.find(businessFilter);
+    const invoiceData = await InvoiceDetail.find(invoiceFilter);
 
-    ////console.log("userData is this", userData);
+    console.log("invoiceData is This", JSON.stringify(invoiceData, null, 2));
+    // console.log("invoiceData is This", invoiceData);
+    // console.log("businessData", businessData);
+    // console.log("userData is this", userData);
 
-    return { userData };
+    return { userData, businessData, invoiceData };
   } catch (error) {
-    ////console.error("Error fetching user data:", error);
     throw error;
   }
 };
 
 const generatePDF = async (req, res) => {
   try {
-    // Extract user ID from query parameters
     const userIdToGeneratePDF = req.query.userId;
+    const businessIdToGeneratePDF = req.query.businessId;
+    const invoiceIdToGeneratePDF = req.query.invoiceId;
 
-    // Check if userIdToGeneratePDF is present in the query parameters
-    if (!userIdToGeneratePDF) {
-      return res.status(400).send("User ID is required in the query parameters");
+    if (
+      !userIdToGeneratePDF ||
+      !businessIdToGeneratePDF ||
+      !invoiceIdToGeneratePDF
+    ) {
+      return res
+        .status(400)
+        .send(
+          "User ID, Business ID, and Invoice ID are required in the query parameters"
+        );
     }
 
-    // Fetch data for the specified user
-    const { userData } = await fetchData({ _id: userIdToGeneratePDF });
+    const { userData, businessData, invoiceData } = await fetchData(
+      { _id: userIdToGeneratePDF },
+      { _id: businessIdToGeneratePDF },
+      { _id: invoiceIdToGeneratePDF }
+    );
+    console.log("userIdToGeneratePDF>>>>", userIdToGeneratePDF);
+    console.log("businessIdToGeneratePDF>>>>", businessIdToGeneratePDF);
+    console.log("invoiceIdToGeneratePDF>>>>", invoiceIdToGeneratePDF);
 
+    // Combine userData, businessData, and invoiceData as needed for PDF generation
+    const combinedData = {
+      user: userData,
+      business: businessData,
+      invoice: invoiceData,
+    };
+    // console.log("combinedData IS THIS>>>>",combinedData)
     const browser = await puppeteer.launch();
-
-    // Create an array to store PDF buffers
     const pdfBuffers = [];
-
-    for (const record of userData) {
+    for (const record of combinedData.user) {
       const page = await browser.newPage();
-
       const htmlPath = path.join(__dirname, "../views/template.html");
       const content = await page.setContent(
         require("fs").readFileSync(htmlPath, "utf8")
       );
 
-      await page.evaluate((record) => {
-        document.getElementById("firstName").innerText = record.firstName || "";
-        document.getElementById("email").innerText = record.email || "";
-        document.getElementById("phone").innerText = record.phone || "";
-        document.getElementById("zipCode").innerText = record.zipCode || "";
-        document.getElementById("country").innerText = record.country || "";
-        document.getElementById("state").innerText = record.state || "";
-        document.getElementById("city").innerText = record.city || "";
-      }, record);
+      // Pass combined data to the page.evaluate function
+      await page.evaluate(
+        (record, combinedData) => {
+          document.getElementById("firstNameTo").innerText =
+            record.firstName || "";
+          document.getElementById("postalCodeTo").innerText =
+            record.postalCode || "";
+          document.getElementById("countryTo").innerText = record.country || "";
+          document.getElementById("cityTo").innerText = record.city || "";
+          document.getElementById("address1To").innerText = record.address1 || "";
 
-      ////console.log("Record>>>", record);
+          // ...
+
+          // Access business and invoice data if needed:
+          const businessInfo = combinedData.business;
+          const firstBusiness =
+            businessInfo && businessInfo.length > 0 ? businessInfo[0] : {};
+          document.getElementById("email").innerText =
+            firstBusiness.email || "";
+          document.getElementById("firstNameFrom").innerText = firstBusiness.firstName || "";
+          document.getElementById("address1From").innerText = firstBusiness.address1 || "";
+          document.getElementById("postalCodeFrom").innerText = firstBusiness.postalCode || "";
+          document.getElementById("cityFrom").innerText = firstBusiness.city || "";
+          document.getElementById("countryFrom").innerText = firstBusiness.country || "";
+
+          // Add other properties as needed
+
+          const invoiceInfo = combinedData.invoice;
+          const firstinvoiceInfo =
+            invoiceInfo && invoiceInfo.length > 0 ? invoiceInfo[0] : {};
+
+          // Displaying individual properties
+          document.getElementById("subtotal").innerText =
+            firstinvoiceInfo.subtotal || "";
+          document.getElementById("total").innerText =
+            firstinvoiceInfo.total || "";
+          document.getElementById("invoiceNumber").innerText =
+            firstinvoiceInfo.invoiceNumber || "";
+          document.getElementById("date").innerText =
+            firstinvoiceInfo.date || "";
+          document.getElementById("description").innerText =
+            firstinvoiceInfo.description || "";
+          document.getElementById("notes").innerText =
+            firstinvoiceInfo.notes || "";
+          document.getElementById("purchaseOrderNumber").innerText =
+            firstinvoiceInfo.purchaseOrderNumber || "";
+          document.getElementById("invoiceDueDate").innerText =
+            firstinvoiceInfo.invoiceDueDate || "";
+
+          // ... your existing code
+
+          // Displaying values from the 'items' array
+          const itemsContainerQuantity = document.getElementById("quantity");
+          const itemsContainerRate = document.getElementById("rate");
+          const itemsContainerAmount = document.getElementById("amount");
+          const itemsContainerDescriptions =
+            document.getElementById("descriptionAray");
+
+          if (firstinvoiceInfo.items && firstinvoiceInfo.items.length > 0) {
+            // Loop through items array (assuming you have a loop)
+            for (const item of firstinvoiceInfo.items) {
+              // Display quantity, rate, amount, and descriptions for each item
+              itemsContainerQuantity.innerText = item.quantity || "";
+              itemsContainerRate.innerText = item.rate || "";
+              itemsContainerAmount.innerText = item.amount || "";
+              itemsContainerDescriptions.innerText = item.descriptions || "";
+
+              // Add logic to handle multiple items, such as creating new HTML elements for each item
+            }
+          } else {
+            itemsContainerQuantity.innerText = "No items available";
+            itemsContainerRate.innerText = "No items available";
+            itemsContainerAmount.innerText = "No items available";
+            itemsContainerDescriptions.innerText = "No items available";
+          }
+        },
+        record,
+        combinedData
+      );
 
       const pdf = await page.pdf({ format: "A4" });
-
-      // Push each PDF buffer into the array
       pdfBuffers.push(pdf);
     }
 
-    // Send all PDF buffers at once
     res.header("Content-Type", "application/pdf");
     pdfBuffers.forEach((pdfBuffer) => res.write(pdfBuffer));
     res.end();
-
     await browser.close();
   } catch (error) {
-    ////console.error("Error generating PDF:", error);
+    console.error(error);
     res.status(500).send("Internal Server Error");
   }
 };
 
+
 module.exports = {
   generatePDF,
 };
-
-
-
-// const puppeteer = require("puppeteer");
-// const { ClientDetail } = require("../Models/clinetModel");
-// const path = require("path");
-// const axios = require("axios");
-
-// const fetchData = async () => {
-//   try {
-//     const userData = await ClientDetail.find();
-
-//     return { userData };
-//   } catch (error) {
-//     ////console.error("Error fetching user data:", error);
-//     throw error;
-//   }
-// };  
-
-// const generatePDF = async (req, res) => {
-//   try {
-//     const { userData } = await fetchData();
-//     const browser = await puppeteer.launch();
-
-//     // Create an array to store PDF buffers
-//     const pdfBuffers = [];
-
-//     for (const record of userData) {
-//       const page = await browser.newPage();
-
-//       const htmlPath = path.join(__dirname, "../views/template.html");
-//       const content = await page.setContent(
-//         require("fs").readFileSync(htmlPath, "utf8")
-//       );
-
-//       await page.evaluate((record) => {
-//         document.getElementById("firstName").innerText = record.firstName || "";
-//         document.getElementById("email").innerText = record.email || "";
-//         document.getElementById("phone").innerText = record.phone || "";
-//         document.getElementById("zipCode").innerText = record.zipCode || "";
-//         document.getElementById("country").innerText = record.country || "";
-//         document.getElementById("state").innerText = record.state || "";
-//         document.getElementById("city").innerText = record.city || "";
-//       }, record);
-
-//       ////console.log("Record>>>", record);
-
-//       const pdf = await page.pdf({ format: "A4" });
-
-//       // Push each PDF buffer into the array
-//       pdfBuffers.push(pdf);
-//     }
-
-//     // Send all PDF buffers at once
-//     res.header("Content-Type", "application/pdf");
-//     pdfBuffers.forEach((pdfBuffer) => res.write(pdfBuffer));
-//     res.end();
-
-//     await browser.close();
-//   } catch (error) {
-//     ////console.error("Error generating PDF:", error);
-//     res.status(500).send("Internal Server Error");
-//   }
-// };
-
-// module.exports = {
-//   generatePDF,
-// };
-

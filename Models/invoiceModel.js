@@ -86,7 +86,7 @@ const InvoiceSchema = new mongoose.Schema({
   },
   items:[
  {   
-  description: {
+  descriptions: {
       type: String,
       required: false,
     },

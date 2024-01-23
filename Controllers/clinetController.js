@@ -19,12 +19,30 @@ const getAllClient = async (req, res) => {
     const records = await ClientDetail.find();
 
     res.status(200).send(records);
-    // //console.log(" Get All ClientDetail", records);
   } catch (error) {
     res.status(500).send({
       message:
         error.message ||
         "Some error occurred while retrieving business profiles.",
+    });
+  }
+};
+
+const getClientProfileById = async (req, res) => {
+  try {
+    const profileId = req.params.id;
+    const record = await ClientDetail.findById(profileId); 
+    if (!record) {
+      return res.status(404).json({
+        message: "Client profile not found with id " + profileId,
+      });
+    }
+
+    res.status(200).json(record);
+  } catch (error) {
+    console.error("Error retrieving client profile: ", error);
+    res.status(500).json({
+      message: "Internal server error while retrieving the client profile.",
     });
   }
 };
@@ -78,6 +96,7 @@ const updateClient = async (req, res) => {
 module.exports = {
   createNewClient,
   getAllClient,
+  getClientProfileById,
   deleteClient,
   updateClient,
 };

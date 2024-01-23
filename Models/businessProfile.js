@@ -1,23 +1,19 @@
 const mongoose = require("mongoose");
 
-const businessProfileOrganizationSchema = new mongoose.Schema({
+const BusinessProfileSchema = new mongoose.Schema({
   organizationName: {
     type: String,
     required: false,
   },
   firstName: {
     type: String,
-    required: false,
+    required: true,
   },
   lastName: {
     type: String,
-    required: false,
+    required: true,
   },
   email: {
-    type: String,
-    required: false,
-  },
-  websiteURL: {
     type: String,
     required: false,
   },
@@ -41,18 +37,11 @@ const businessProfileOrganizationSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
-  items: [
-    {
-      customFieldName: {
-        type: String,
-        required: false,
-      },
-      customFieldValue: {
-        type: String,
-        required: false,
-      },
-    },
-  ],
+
+  companyName: {
+    type: String,
+    required: false,
+  },
   country: {
     type: String,
     required: false,
@@ -74,7 +63,11 @@ const businessProfileOrganizationSchema = new mongoose.Schema({
     required: false,
   },
 
-  companyName: {
+  customFieldName: {
+    type: String,
+    required: false,
+  },
+  customFieldValue: {
     type: String,
     required: false,
   },
@@ -82,10 +75,14 @@ const businessProfileOrganizationSchema = new mongoose.Schema({
     type: Number,
     required: false,
   },
+  profileType:{
+    default:null,
+    type: String,
+  }
 });
 
-const BusinessProfileOrganization = mongoose.model(
-  "businessProfileOrganization",
-  businessProfileOrganizationSchema
+const BusinessProfile = mongoose.model(
+  "BusinessProfile",
+  BusinessProfileSchema
 );
-module.exports = { BusinessProfileOrganization };
+module.exports = { BusinessProfile };

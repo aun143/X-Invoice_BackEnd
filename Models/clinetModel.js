@@ -1,13 +1,18 @@
 const mongoose = require("mongoose");
 
 const ClientSchema = new mongoose.Schema({
+  clientType: {
+    type: String,
+    enum: ["individual", "organization"],
+    required: false,
+  },
   firstName: {
     type: String,
-    required: false,
+    required: true,
   },
   lastName: {
     type: String,
-    required: false,
+    required: true,
   },
   email: {
     type: String,

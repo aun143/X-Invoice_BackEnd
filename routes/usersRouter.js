@@ -7,7 +7,7 @@ const {
   deleteLoginUser,
   updateLoginUser,
   LoginUser,
-} = require("../Controllers/loginController");
+} = require("../Controllers/usersController");
 // const { protectRoutes } = require("../Middleware/authMiddleware");
 
 // router.use(protectRoutes);
@@ -20,5 +20,5 @@ router.delete("/deleteLoginUser/:id", deleteLoginUser);
 router.put("/updateLoginUser/:id", updateLoginUser);
 
 module.exports = {
-  LoginUserRouter: router,
+  usersRouter: router,
 };

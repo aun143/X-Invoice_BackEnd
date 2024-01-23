@@ -3,11 +3,11 @@ const mongoose = require("mongoose");
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
-    required: false,
+    required: true,
   },
   password: {
     type: String,
-    required: false,
+    required: true,
   },
   newPassword: {
     type: String,
@@ -16,6 +16,18 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: false,
+  },
+  individualProfile: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "BusinessProfile",
+    required: false,
+    default: null,
+  },
+  organizationProfile: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "BusinessProfile",
+    required: false,
+    default: null,
   },
 });
 const userModel = mongoose.model("user", userSchema);
