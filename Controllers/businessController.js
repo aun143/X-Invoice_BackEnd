@@ -5,7 +5,7 @@ const createBusinessProfile = async (req, res) => {
   try {
     const { userId, profileBody } = req.body;
     const singleUser = await userModel.findById(userId);
-    // console.log("profileBody: is this>>",profileBody) 
+    // console.log("profileBody: is this>>",profileBody)
 
     if (
       singleUser &&

@@ -1,14 +1,15 @@
 const express = require("express");
 const cors = require("cors");
 const { connectToDatabase } = require("./DataBase/dbConnection");
+const { usersRouter } = require("./routes/usersRouter");
+const { businessRouter } = require("./routes/businessRouter ");
+const { clientRouter } = require("./routes/ClientRouter");
 const { invoiceRouter } = require("./routes/invoiceRouter");
 const { uploadRouter } = require("./routes/uploadRouter");
-const { clientRouter } = require("./routes/ClientRouter");
-const { businessRouter } = require("./routes/businessRouter ");
+const { emailRouter } = require("./routes/emailRouter");
 const pdfRoutes = require("./routes/pdfRoutes");
-const { usersRouter } = require("./routes/usersRouter");
 
-const app = express();
+const app = express();  
 app.use(
   cors({
     origin: "http://localhost:5173",
@@ -23,11 +24,12 @@ const PORT = process.env.PORT || 5000;
 
 connectToDatabase();
 
-app.use("/client", clientRouter);
-app.use("/business", businessRouter);
-app.use("/upload", uploadRouter);
-app.use("/invoices", invoiceRouter);
 app.use("/login", usersRouter);
+app.use("/business", businessRouter);
+app.use("/client", clientRouter);
+app.use("/invoices", invoiceRouter);
+app.use("/upload", uploadRouter);
+app.use("/email", emailRouter);
 app.use("/pdf", pdfRoutes);
 
 app.listen(PORT, () => {

@@ -7,9 +7,9 @@ const {
   updateClient,
   getClientProfileById,
 } = require("../Controllers/clinetController");
-// const { protectRoutes } = require("../Middleware/authMiddleware");
+const { protectRoutes } = require("../Middleware/authMiddleware");
 
-// router.use(protectRoutes);
+router.use(protectRoutes);
 
 
 router.post("/createClient", createNewClient);

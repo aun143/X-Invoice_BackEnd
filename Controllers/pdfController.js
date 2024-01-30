@@ -17,7 +17,7 @@ const fetchData = async (
     const businessData = await BusinessProfile.find(businessFilter);
     const invoiceData = await InvoiceDetail.find(invoiceFilter);
 
-    console.log("invoiceData is This", JSON.stringify(invoiceData, null, 2));
+    // console.log("invoiceData is This", JSON.stringify(invoiceData, null, 2));
     // console.log("invoiceData is This", invoiceData);
     // console.log("businessData", businessData);
     // console.log("userData is this", userData);
@@ -33,6 +33,8 @@ const generatePDF = async (req, res) => {
     const userIdToGeneratePDF = req.query.userId;
     const businessIdToGeneratePDF = req.query.businessId;
     const invoiceIdToGeneratePDF = req.query.invoiceId;
+
+   
 
     if (
       !userIdToGeneratePDF ||
@@ -66,7 +68,7 @@ const generatePDF = async (req, res) => {
     const pdfBuffers = [];
     for (const record of combinedData.user) {
       const page = await browser.newPage();
-      const htmlPath = path.join(__dirname, "../views/template.html");
+      const htmlPath = path.join(__dirname, "../views/template-pdf.html");
       const content = await page.setContent(
         require("fs").readFileSync(htmlPath, "utf8")
       );
@@ -120,32 +122,69 @@ const generatePDF = async (req, res) => {
           document.getElementById("invoiceDueDate").innerText =
             firstinvoiceInfo.invoiceDueDate || "";
 
-          // ... your existing code
+const itemsContainer = document.getElementById("itemsContainer");
 
-          // Displaying values from the 'items' array
-          const itemsContainerQuantity = document.getElementById("quantity");
-          const itemsContainerRate = document.getElementById("rate");
-          const itemsContainerAmount = document.getElementById("amount");
-          const itemsContainerDescriptions =
-            document.getElementById("descriptionAray");
+if (firstinvoiceInfo.items && firstinvoiceInfo.items.length > 0) {
+  // Clear the items container before adding new items
+  itemsContainer.innerHTML = "";
 
-          if (firstinvoiceInfo.items && firstinvoiceInfo.items.length > 0) {
-            // Loop through items array (assuming you have a loop)
-            for (const item of firstinvoiceInfo.items) {
-              // Display quantity, rate, amount, and descriptions for each item
-              itemsContainerQuantity.innerText = item.quantity || "";
-              itemsContainerRate.innerText = item.rate || "";
-              itemsContainerAmount.innerText = item.amount || "";
-              itemsContainerDescriptions.innerText = item.descriptions || "";
+  // Loop through items array (assuming you have a loop)
+  for (const item of firstinvoiceInfo.items) {
+    // Create a new div for each item
+    const itemContainer = document.createElement("div");
 
-              // Add logic to handle multiple items, such as creating new HTML elements for each item
-            }
-          } else {
-            itemsContainerQuantity.innerText = "No items available";
-            itemsContainerRate.innerText = "No items available";
-            itemsContainerAmount.innerText = "No items available";
-            itemsContainerDescriptions.innerText = "No items available";
-          }
+    // Display quantity, rate, amount, and descriptions for each item
+    itemContainer.innerHTML = `
+      <p><strong>Description:</strong> ${item.description || ""}</p>
+      <p><strong>Quantity:</strong> ${item.quantity || ""}</p>
+      <p><strong>Rate:</strong> ${item.rate || ""}</p>
+      <p><strong>Amount:</strong> ${item.amount || ""}</p>
+    `;
+
+    // Append the item container to the items container
+    itemsContainer.appendChild(itemContainer);
+  }
+} else {
+  itemsContainer.innerHTML = "<p>No items available</p>";
+}
+
+
+
+
+
+//           const itemsContainer = document.getElementById("itemsContainer");
+
+// if (firstinvoiceInfo.items && firstinvoiceInfo.items.length > 0) {
+//   for (const item of firstinvoiceInfo.items) {
+//     const itemContainer = document.createElement("div");
+
+//     const quantityElement = document.createElement("p");
+//     quantityElement.innerText = `Quantity: ${item.quantity || ""}`;
+//     itemContainer.appendChild(quantityElement);
+
+//     const rateElement = document.createElement("p");
+//     rateElement.innerText = `Rate: ${item.rate || ""}`;
+//     itemContainer.appendChild(rateElement);
+
+//     const amountElement = document.createElement("p");
+//     amountElement.innerText = `Amount: ${item.amount || ""}`;
+//     itemContainer.appendChild(amountElement);
+
+//     const descriptionElement = document.createElement("p");
+//     descriptionElement.innerText = `Description: ${item.description || ""}`;
+//     itemContainer.appendChild(descriptionElement);
+
+//     // Append a line break for separation between items
+//     const lineBreak = document.createElement("hr");
+//     itemContainer.appendChild(lineBreak);
+
+//     itemsContainer.appendChild(itemContainer);
+//   }
+// } else {
+//   itemsContainer.innerText = "No items available";
+// }
+
+
         },
         record,
         combinedData
@@ -155,7 +194,9 @@ const generatePDF = async (req, res) => {
       pdfBuffers.push(pdf);
     }
 
-    res.header("Content-Type", "application/pdf");
+    res.setHeader("Content-Type", "application/pdf");
+
+    // res.setHeader("Content-Disposition", "attachment; filename=X-Invoicely.pdf");
     pdfBuffers.forEach((pdfBuffer) => res.write(pdfBuffer));
     res.end();
     await browser.close();
@@ -166,6 +207,8 @@ const generatePDF = async (req, res) => {
 };
 
 
+
 module.exports = {
   generatePDF,
 };
+

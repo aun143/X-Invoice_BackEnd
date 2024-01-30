@@ -1,0 +1,66 @@
+Hi Dear! {{receiver}},
+
+A new invoice has been generated from XInvoicely for you. Here's a quick summary:
+Invoice Details:
+Description: {{description}}
+Quantity: {{quantity}}
+Amount: {{amount}}
+Total Invoice Amount: {{total}}
+Due Date: {{invoiceDueDate}}
+
+You can view the invoice or download a PDF copy of it from the following link:
+{{invoiceLink}}
+Best regards,
+{{sender}}
+
+
+{{!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+
+    .email-container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .invoice-details {
+      margin-top: 20px;
+    }
+
+    .invoice-link {
+      color: #007BFF;
+    }
+  </style>
+</head>
+<body>
+  <div class="email-container">
+    <p>Hi Dear! {{receiver}},</p>
+
+    <p>A new invoice has been generated from XInvoicely for you. Here's a quick summary:</p>
+
+    <div class="invoice-details">
+      <p><strong>Description:</strong> {{description}}</p>
+      <p><strong>Quantity:</strong> {{quantity}}</p>
+      <p><strong>Amount:</strong> {{amount}}</p>
+      <p><strong>Total Invoice Amount:</strong> {{total}}</p>
+      <p><strong>Due Date:</strong> {{invoiceDueDate}}</p>
+    </div>
+
+    <p>You can view the invoice or download a PDF copy of it from the following link: <a href="{{invoiceLink}}" class="invoice-link">{{invoiceLink}}</a></p>
+
+    <p>Best regards, {{sender}}</p>
+  </div>
+</body>
+</html> --}}

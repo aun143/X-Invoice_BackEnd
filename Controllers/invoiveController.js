@@ -3,10 +3,11 @@ const validStatusValues = ["pending", "paid", "unpaid"];
 
 const createInvoice = async (req, res) => {
   try {
-    const newRecord = await InvoiceDetail.create(req.body);
-
-    res.status(200).send(newRecord);
-    //console.log("NewRecord", newRecord);
+    const user = req.user._id;
+    req.body.user = user;
+    const newinvoice = await InvoiceDetail.create(req.body);
+    res.status(200).send(newinvoice);
+    //console.log("Newinvoice", newinvoice);
   } catch (error) {
     res.status(500).send({
       message:
@@ -17,47 +18,59 @@ const createInvoice = async (req, res) => {
 
 const getAllInvoice = async (req, res) => {
   try {
-    const records = await InvoiceDetail.find();
+    const invoices = await InvoiceDetail.find();
 
-    res.status(200).send(records);
-    // //console.log("Get All InvoiceDetail", records);
+    res.status(200).send(invoices);
+    // //console.log("Get All InvoiceDetail", invoices);
   } catch (error) {
     res.status(500).send({
       message:
-        error.message ||
-        "Some error occurred while retrieving Invoice .",
+        error.message || "Some error occurred while retrieving Invoice .",
+    });
+  }
+};
+const getSingleInvoice = async (req, res) => {
+  try {
+    const invoiceId = req.params.id;
+    const invoice = await InvoiceDetail.findById(invoiceId);
+    if (!invoice) {
+      return res.status(404).json({
+        message: "Invoive Not  found with This id " , invoiceId,
+      });
+    }
+    res.status(200).json(invoice);
+  } catch (error) {
+    console.error("Error retrieving Invoive: ", error);
+    res.status(500).json({
+      message: "Internal server error while retrieving the Invoive.",
     });
   }
 };
 
-
-
-
 const deleteInvoice = async (req, res) => {
   try {
-    const recordId = req.params.id;
-    const deletedRecord = await InvoiceDetail.findByIdAndDelete(recordId);
+    const invoiceId = req.params.id;
+    const deletedinvoice = await InvoiceDetail.findByIdAndDelete(invoiceId);
 
-    if (!deletedRecord) {
+    if (!deletedinvoice) {
       return res
         .status(404)
-        .send({ message: "Record not found for deletion." });
+        .send({ message: "invoice not found for deletion." });
     }
 
-    res.status(200).send(deletedRecord);
-    //console.log("Deleted Record", deletedRecord);
+    res.status(200).send(deletedinvoice);
+    //console.log("Deleted invoice", deletedinvoice);
   } catch (error) {
     res.status(500).send({
       message:
-        error.message ||
-        "Some error occurred while deleting the Invoice .",
+        error.message || "Some error occurred while deleting the Invoice .",
     });
   }
 };
 
 const updateInvoiceStatus = async (req, res) => {
   try {
-    const recordId = req.params.id;
+    const invoiceId = req.params.id;
     const updateData = req.body;
 
     // Check if the provided status is a valid status value
@@ -65,54 +78,53 @@ const updateInvoiceStatus = async (req, res) => {
       return res.status(400).send({ message: "Invalid status value." });
     }
 
-    const updatedRecord = await InvoiceDetail.findByIdAndUpdate(
-      recordId,
+    const updatedinvoice = await InvoiceDetail.findByIdAndUpdate(
+      invoiceId,
       updateData,
       { new: true }
     );
 
-    if (!updatedRecord) {
-      return res.status(404).send({ message: "Record not found for update." });
+    if (!updatedinvoice) {
+      return res.status(404).send({ message: "invoice not found for update." });
     }
 
-    res.status(200).send(updatedRecord);
-    //console.log("Updated Record", updatedRecord);
+    res.status(200).send(updatedinvoice);
+    //console.log("Updated invoice", updatedinvoice);
   } catch (error) {
     res.status(500).send({
       message:
-        error.message ||
-        "Some error occurred while updating the Invoice .",
+        error.message || "Some error occurred while updating the Invoice .",
     });
   }
 };
 
 const updateInvoice = async (req, res) => {
   try {
-    const recordId = req.params.id;
+    const invoiceId = req.params.id;
     const updateData = req.body;
 
-    const updatedRecord = await InvoiceDetail.findByIdAndUpdate(
-      recordId,
+    const updatedinvoice = await InvoiceDetail.findByIdAndUpdate(
+      invoiceId,
       updateData,
       { new: true }
     );
 
-    if (!updatedRecord) {
-      return res.status(404).send({ message: "Record not found for update." });
+    if (!updatedinvoice) {
+      return res.status(404).send({ message: "invoice not found for update." });
     }
 
-    res.status(200).send(updatedRecord);
-    //console.log("Updated Record", updatedRecord);
+    res.status(200).send(updatedinvoice);
+    //console.log("Updated invoice", updatedinvoice);
   } catch (error) {
     res.status(500).send({
       message:
-        error.message ||
-        "Some error occurred while updating the Invoice .",
+        error.message || "Some error occurred while updating the Invoice .",
     });
   }
 };
 module.exports = {
   createInvoice,
+  getSingleInvoice,
   getAllInvoice,
   deleteInvoice,
   updateInvoiceStatus,

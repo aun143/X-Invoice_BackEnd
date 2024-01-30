@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const { hashPassword, generarteToken } = require("../helpers/user");
 
-const createLoginUser = async (req, res) => {
+const createUser = async (req, res) => {
   try {
     const reqData = req.body;
 
@@ -50,7 +50,7 @@ const LoginUser = async (req, res) => {
     throw error;
   }
 };
-
+console.log("LoginUser",LoginUser)
 async function forgotPassword(req, res) {
   const { email, newPassword } = req.body;
   //console.log("Request User", req.body);
@@ -73,6 +73,24 @@ async function forgotPassword(req, res) {
 const getAllLoginUser = async (req, res) => {
   try {
     const records = await userModel.find();
+
+    res.status(200).send(records);
+    //console.log("Get All User", records);
+  } catch (error) {
+    res.status(500).send({
+      message:
+        error.message || "Some error occurred while retrieving   ALl User.",
+    });
+  }
+};
+
+const getProfile = async (req, res) => {
+  try {
+    const user = req.user;
+
+    const records = await userModel
+      .findById(user._id)
+      .populate("individualProfile organizationProfile");
 
     res.status(200).send(records);
     //console.log("Get All User", records);
@@ -131,10 +149,11 @@ const updateLoginUser = async (req, res) => {
 };
 
 module.exports = {
-  createLoginUser,
+  createUser,
   forgotPassword,
   getAllLoginUser,
   deleteLoginUser,
   updateLoginUser,
   LoginUser,
+  getProfile,
 };

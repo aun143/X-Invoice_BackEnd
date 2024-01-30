@@ -14,11 +14,37 @@ const createNewClient = async (req, res) => {
   }
 };
 
+// const getAllClient = async (req, res) => {
+//   try {
+//     const records = await ClientDetail.find();
+
+//     res.status(200).send(records);
+//   } catch (error) {
+//     res.status(500).send({
+//       message:
+//         error.message ||
+//         "Some error occurred while retrieving business profiles.",
+//     });
+//   }
+// };
+
 const getAllClient = async (req, res) => {
   try {
-    const records = await ClientDetail.find();
+    const page = parseInt(req.query.page) || 1; // Current page (default to 1)
+    const pageSize = parseInt(req.query.pageSize) || 5; // Number of items per page (default to 10)
 
-    res.status(200).send(records);
+    const startIndex = (page - 1) * pageSize;
+    const endIndex = page * pageSize;
+
+    const records = await ClientDetail.find().skip(startIndex).limit(pageSize);
+
+    res.status(200).send({
+      page,
+      pageSize,
+      totalItems: records.length, // You may want to use total count from a separate query for better accuracy
+      totalPages: Math.ceil(records.length / pageSize),
+      data: records,
+    });
   } catch (error) {
     res.status(500).send({
       message:
@@ -31,7 +57,7 @@ const getAllClient = async (req, res) => {
 const getClientProfileById = async (req, res) => {
   try {
     const profileId = req.params.id;
-    const record = await ClientDetail.findById(profileId); 
+    const record = await ClientDetail.findById(profileId);
     if (!record) {
       return res.status(404).json({
         message: "Client profile not found with id " + profileId,

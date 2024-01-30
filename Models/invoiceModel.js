@@ -2,6 +2,11 @@ const mongoose = require("mongoose");
 
 const validStatusValues = ["Draft", "Paid", "Unpaid"];
 const InvoiceSchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "user",
+    required: true,
+  },
   description: {
     type: String,
     required: false,
@@ -86,7 +91,7 @@ const InvoiceSchema = new mongoose.Schema({
   },
   items:[
  {   
-  descriptions: {
+  description: {
       type: String,
       required: false,
     },
