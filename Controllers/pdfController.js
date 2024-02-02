@@ -1,4 +1,7 @@
 const puppeteer = require("puppeteer");
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
+
 const { ClientDetail } = require("../Models/clinetModel");
 const { BusinessProfile } = require("../Models/businessProfile");
 const { InvoiceDetail } = require("../Models/invoiceModel");
@@ -17,10 +20,6 @@ const fetchData = async (
     const businessData = await BusinessProfile.find(businessFilter);
     const invoiceData = await InvoiceDetail.find(invoiceFilter);
 
-    // console.log("invoiceData is This", JSON.stringify(invoiceData, null, 2));
-    // console.log("invoiceData is This", invoiceData);
-    // console.log("businessData", businessData);
-    // console.log("userData is this", userData);
 
     return { userData, businessData, invoiceData };
   } catch (error) {
@@ -34,7 +33,7 @@ const generatePDF = async (req, res) => {
     const businessIdToGeneratePDF = req.query.businessId;
     const invoiceIdToGeneratePDF = req.query.invoiceId;
 
-   
+    const generatedLink = `http://localhost:3010/pdf/generate?userId=${userIdToGeneratePDF}&businessId=${businessIdToGeneratePDF}&invoiceId=${invoiceIdToGeneratePDF}`;
 
     if (
       !userIdToGeneratePDF ||
@@ -53,17 +52,13 @@ const generatePDF = async (req, res) => {
       { _id: businessIdToGeneratePDF },
       { _id: invoiceIdToGeneratePDF }
     );
-    console.log("userIdToGeneratePDF>>>>", userIdToGeneratePDF);
-    console.log("businessIdToGeneratePDF>>>>", businessIdToGeneratePDF);
-    console.log("invoiceIdToGeneratePDF>>>>", invoiceIdToGeneratePDF);
+   
 
-    // Combine userData, businessData, and invoiceData as needed for PDF generation
     const combinedData = {
       user: userData,
       business: businessData,
       invoice: invoiceData,
     };
-    // console.log("combinedData IS THIS>>>>",combinedData)
     const browser = await puppeteer.launch();
     const pdfBuffers = [];
     for (const record of combinedData.user) {
@@ -72,8 +67,11 @@ const generatePDF = async (req, res) => {
       const content = await page.setContent(
         require("fs").readFileSync(htmlPath, "utf8")
       );
+      await page.evaluate((generatedLink) => {
+        document.getElementById("generatePdfLink").href = generatedLink;
+      }, generatedLink);
+  
 
-      // Pass combined data to the page.evaluate function
       await page.evaluate(
         (record, combinedData) => {
           document.getElementById("firstNameTo").innerText =
@@ -82,29 +80,29 @@ const generatePDF = async (req, res) => {
             record.postalCode || "";
           document.getElementById("countryTo").innerText = record.country || "";
           document.getElementById("cityTo").innerText = record.city || "";
-          document.getElementById("address1To").innerText = record.address1 || "";
+          document.getElementById("address1To").innerText =
+            record.address1 || "";
 
-          // ...
-
-          // Access business and invoice data if needed:
           const businessInfo = combinedData.business;
           const firstBusiness =
             businessInfo && businessInfo.length > 0 ? businessInfo[0] : {};
           document.getElementById("email").innerText =
             firstBusiness.email || "";
-          document.getElementById("firstNameFrom").innerText = firstBusiness.firstName || "";
-          document.getElementById("address1From").innerText = firstBusiness.address1 || "";
-          document.getElementById("postalCodeFrom").innerText = firstBusiness.postalCode || "";
-          document.getElementById("cityFrom").innerText = firstBusiness.city || "";
-          document.getElementById("countryFrom").innerText = firstBusiness.country || "";
-
-          // Add other properties as needed
+          document.getElementById("firstNameFrom").innerText =
+            firstBusiness.firstName || "";
+          document.getElementById("address1From").innerText =
+            firstBusiness.address1 || "";
+          document.getElementById("postalCodeFrom").innerText =
+            firstBusiness.postalCode || "";
+          document.getElementById("cityFrom").innerText =
+            firstBusiness.city || "";
+          document.getElementById("countryFrom").innerText =
+            firstBusiness.country || "";
 
           const invoiceInfo = combinedData.invoice;
           const firstinvoiceInfo =
             invoiceInfo && invoiceInfo.length > 0 ? invoiceInfo[0] : {};
 
-          // Displaying individual properties
           document.getElementById("subtotal").innerText =
             firstinvoiceInfo.subtotal || "";
           document.getElementById("total").innerText =
@@ -122,69 +120,24 @@ const generatePDF = async (req, res) => {
           document.getElementById("invoiceDueDate").innerText =
             firstinvoiceInfo.invoiceDueDate || "";
 
-const itemsContainer = document.getElementById("itemsContainer");
+          const itemsContainer = document.getElementById("itemsContainer");
 
-if (firstinvoiceInfo.items && firstinvoiceInfo.items.length > 0) {
-  // Clear the items container before adding new items
-  itemsContainer.innerHTML = "";
+          if (firstinvoiceInfo.items && firstinvoiceInfo.items.length > 0) {
+            itemsContainer.innerHTML = "";
 
-  // Loop through items array (assuming you have a loop)
-  for (const item of firstinvoiceInfo.items) {
-    // Create a new div for each item
-    const itemContainer = document.createElement("div");
-
-    // Display quantity, rate, amount, and descriptions for each item
-    itemContainer.innerHTML = `
+            for (const item of firstinvoiceInfo.items) {
+              const itemContainer = document.createElement("div");
+              itemContainer.innerHTML = `
       <p><strong>Description:</strong> ${item.description || ""}</p>
       <p><strong>Quantity:</strong> ${item.quantity || ""}</p>
       <p><strong>Rate:</strong> ${item.rate || ""}</p>
       <p><strong>Amount:</strong> ${item.amount || ""}</p>
     `;
-
-    // Append the item container to the items container
-    itemsContainer.appendChild(itemContainer);
-  }
-} else {
-  itemsContainer.innerHTML = "<p>No items available</p>";
-}
-
-
-
-
-
-//           const itemsContainer = document.getElementById("itemsContainer");
-
-// if (firstinvoiceInfo.items && firstinvoiceInfo.items.length > 0) {
-//   for (const item of firstinvoiceInfo.items) {
-//     const itemContainer = document.createElement("div");
-
-//     const quantityElement = document.createElement("p");
-//     quantityElement.innerText = `Quantity: ${item.quantity || ""}`;
-//     itemContainer.appendChild(quantityElement);
-
-//     const rateElement = document.createElement("p");
-//     rateElement.innerText = `Rate: ${item.rate || ""}`;
-//     itemContainer.appendChild(rateElement);
-
-//     const amountElement = document.createElement("p");
-//     amountElement.innerText = `Amount: ${item.amount || ""}`;
-//     itemContainer.appendChild(amountElement);
-
-//     const descriptionElement = document.createElement("p");
-//     descriptionElement.innerText = `Description: ${item.description || ""}`;
-//     itemContainer.appendChild(descriptionElement);
-
-//     // Append a line break for separation between items
-//     const lineBreak = document.createElement("hr");
-//     itemContainer.appendChild(lineBreak);
-
-//     itemsContainer.appendChild(itemContainer);
-//   }
-// } else {
-//   itemsContainer.innerText = "No items available";
-// }
-
-
+              itemsContainer.appendChild(itemContainer);
+            }
+          } else {
+            itemsContainer.innerHTML = "<p>No items available</p>";
+          }
         },
         record,
         combinedData
@@ -195,8 +148,6 @@ if (firstinvoiceInfo.items && firstinvoiceInfo.items.length > 0) {
     }
 
     res.setHeader("Content-Type", "application/pdf");
-
-    // res.setHeader("Content-Disposition", "attachment; filename=X-Invoicely.pdf");
     pdfBuffers.forEach((pdfBuffer) => res.write(pdfBuffer));
     res.end();
     await browser.close();
@@ -206,9 +157,6 @@ if (firstinvoiceInfo.items && firstinvoiceInfo.items.length > 0) {
   }
 };
 
-
-
 module.exports = {
   generatePDF,
 };
-

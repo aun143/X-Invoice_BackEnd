@@ -58,7 +58,6 @@
   <hr />
   <div id="itemsContainer" style="display: flex; justify-content: space-between;">
     {{#each items}}
-      <!-- Display data with property name -->
       <div >
         <p><strong>Description:</strong></p>
         <p><span>{{this.description}}</span></p>
@@ -72,7 +71,6 @@
     {{/each}}
   
     {{#each items}}
-      <!-- Display data without property name -->
       <div>
         <p><span>{{this.description}}</span></p>
         <p><span>{{this.quantity}}</span></p>
@@ -82,31 +80,8 @@
     {{/each}}
   </div>
   
-  
-  <!-- <div id="itemsContainer"
-    style="display: flex; justify-content: space-between; align-items: center"
-  >
-  <div style="margin-right: 20px">
-    <p><strong>Description:</strong></p>
-    <p><span id="descriptionAray"></span></p>
-  </div>
-  
-    <div style="margin-right: 20px">
-      <p><strong>Quantity</strong></p>
-      <p><span id="quantity"></span></p>
 
-    </div>
-    <div style="margin-right: 20px">
-      <p><strong>Rate</strong></p>
-      <p><span id="rate"></span></p>
 
-    </div>
-    <div>
-      <p><strong>Amount</strong></p>
-      <p><span id="amount"></span></p>
-
-    </div>
-  </div> -->
   <hr />
 
   <div
@@ -136,27 +111,20 @@
    <hr />
    <div style="display: flex; justify-content: space-between">
      <p><strong>Email:</strong>   <p><span id="email"></span></p></p>
-     <!-- <p style="margin-left: auto"><img src="" alt="Not Available Now" /></p> -->
    </div>
  
   </div>
-<!-- ... (previous HTML code) -->
 
-<div style="text-align: center; margin-top: 20px;">
-  <a href="/api/generatePDF?userId={{user._id}}&businessId={{business._id}}&invoiceId={{invoice._id}}" download="invoice.pdf">
+  <div style="text-align: center;">
+    <p>Click the following link: <a id="generatePdfLink" href="#" target="_blank">Generate PDF</a></p>
+  </div>
   
-  <!-- <a href="/api/generatePDF?userId=65aa78568d6f3d1a7f909e1c&businessId=65ae51d686cd12e52252859d&invoiceId=65b35e67f7201b0951c95bfa" download="invoice.pdf"> -->
-    Download PDF
-  </a>
   
-  <!-- <a href="/api/generatePDF?userId={{user._id}}&businessId={{business._id}}&invoiceId={{invoice._id}}" download="invoice.pdf">
-    Download PDF
-  </a> -->
-</div>
+  
+  
+  
+  </div>
 
-<!-- ... (remaining HTML code) -->
-
-  
  </div>
   </body>
 </html>

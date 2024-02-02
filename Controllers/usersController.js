@@ -50,7 +50,6 @@ const LoginUser = async (req, res) => {
     throw error;
   }
 };
-console.log("LoginUser",LoginUser)
 async function forgotPassword(req, res) {
   const { email, newPassword } = req.body;
   //console.log("Request User", req.body);
