@@ -18,10 +18,14 @@ const createInvoice = async (req, res) => {
 
 const getAllInvoice = async (req, res) => {
   try {
-    const invoices = await InvoiceDetail.find();
+    const user =req.user._id;
+
+    const invoices = await InvoiceDetail.find({user:user});
+
+    // console.log("userId",user)
 
     res.status(200).send(invoices);
-    // //console.log("Get All InvoiceDetail", invoices);
+    // console.log("Get All InvoiceDetail", invoices);
   } catch (error) {
     res.status(500).send({
       message:

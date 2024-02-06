@@ -1,50 +1,50 @@
 const { ClientDetail } = require("../Models/clinetModel");
 
-const createNewClient = async (req, res) => {
-  try {
-    const newRecord = await ClientDetail.create(req.body);
-
-    res.status(200).send(newRecord);
-    //console.log("Create ClientDetail ", newRecord);
-  } catch (error) {
-    res.status(500).send({
-      message:
-        error.message || "Some error occurred while creating the Invoice.",
-    });
-  }
-};
-
-// const getAllClient = async (req, res) => {
+// const createNewClient = async (req, res) => {
 //   try {
-//     const records = await ClientDetail.find();
+//     const user=req.user._id;
+//     req.body.user=user;
+//     const newRecord = await ClientDetail.create(req.body);
 
-//     res.status(200).send(records);
+//     res.status(200).send(newRecord);
+//     //console.log("Create ClientDetail ", newRecord);
 //   } catch (error) {
 //     res.status(500).send({
 //       message:
-//         error.message ||
-//         "Some error occurred while retrieving business profiles.",
+//         error.message || "Some error occurred while creating the Invoice.",
 //     });
 //   }
 // };
 
+const createNewClient = async (req, res) => {
+  try {
+    const user = req.user._id;
+    req.body.user = user;
+
+    // Determine the clientType based on the request body
+    const clientType = req.body.clientType;
+    if (!clientType || !["individual", "organization"].includes(clientType)) {
+      return res.status(400).send({ message: "Invalid client type provided." });
+    }
+    console.log("clientType: ", clientType);
+    // Create the new client record
+    const newRecord = await ClientDetail.create(req.body);
+    res.status(200).send(newRecord);
+  } catch (error) {
+    res.status(500).send({
+      message:
+        error.message || "Some error occurred while creating the client.",
+    });
+  }
+};
+
 const getAllClient = async (req, res) => {
   try {
-    const page = parseInt(req.query.page) || 1; // Current page (default to 1)
-    const pageSize = parseInt(req.query.pageSize) || 5; // Number of items per page (default to 10)
+    const user = req.user._id;
 
-    const startIndex = (page - 1) * pageSize;
-    const endIndex = page * pageSize;
+    const records = await ClientDetail.find({ user: user });
 
-    const records = await ClientDetail.find().skip(startIndex).limit(pageSize);
-
-    res.status(200).send({
-      page,
-      pageSize,
-      totalItems: records.length, // You may want to use total count from a separate query for better accuracy
-      totalPages: Math.ceil(records.length / pageSize),
-      data: records,
-    });
+    res.status(200).send(records);
   } catch (error) {
     res.status(500).send({
       message:

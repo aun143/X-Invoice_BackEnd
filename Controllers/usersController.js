@@ -1,6 +1,9 @@
 const { userModel } = require("../Models/usersModel");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const comparePassword = async (plainPassword, hashedPassword) => {
+  return await bcrypt.compare(plainPassword, hashedPassword);
+};
 const { hashPassword, generarteToken } = require("../helpers/user");
 
 const createUser = async (req, res) => {
@@ -35,21 +38,52 @@ const LoginUser = async (req, res) => {
     const user = await userModel.findOne({ email: reqData.email });
 
     if (!user) {
-      return res
-        .status(404)
-        .json({ type: "bad", message: `Invalid email or password!` });
+      return res.status(404).json({ type: "bad", message: `Invalid email ` });
     }
+
+    // Check if the provided password matches the stored password
+    const isPasswordValid = await comparePassword(reqData.password, user.password);
+
+    if (!isPasswordValid) {
+      return res.status(404).json({ type: "bad", message: `Invalid  password!` });
+    }
+
+    // If email and password are correct, generate a token
     const account = JSON.parse(JSON.stringify(user));
     const token = generarteToken(user);
+
     return res.status(200).json({
       type: "success",
-      message: `Account Login successfull`,
+      message: `Account Login successful`,
       data: { ...account, access_token: token },
     });
   } catch (error) {
     throw error;
   }
 };
+
+
+// const LoginUser = async (req, res) => {
+//   try {
+//     const reqData = req.body;
+//     const user = await userModel.findOne({ email: reqData.email ,password: reqData.password });
+
+//     if (!user) {
+//       return res
+//         .status(404)
+//         .json({ type: "bad", message: `Invalid email or password!` });
+//     }
+//     const account = JSON.parse(JSON.stringify(user));
+//     const token = generarteToken(user);
+//     return res.status(200).json({
+//       type: "success",
+//       message: `Account Login successfull`,
+//       data: { ...account, access_token: token },
+//     });
+//   } catch (error) {
+//     throw error;
+//   }
+// };
 async function forgotPassword(req, res) {
   const { email, newPassword } = req.body;
   //console.log("Request User", req.body);

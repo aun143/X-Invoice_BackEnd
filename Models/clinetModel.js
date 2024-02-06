@@ -1,6 +1,12 @@
 const mongoose = require("mongoose");
 
 const ClientSchema = new mongoose.Schema({
+ 
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "user",
+    required: true,
+  },
   clientType: {
     type: String,
     enum: ["individual", "organization"],
