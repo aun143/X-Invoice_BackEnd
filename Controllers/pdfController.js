@@ -11,17 +11,17 @@ const axios = require("axios");
 const { log } = require("console");
 
 const fetchData = async (
-  userFilter = {},
+  clientFilter = {},
   businessFilter = {},
   invoiceFilter = {}
 ) => {
   try {
-    const userData = await ClientDetail.find(userFilter);
+    const clientData = await ClientDetail.find(clientFilter);
     const businessData = await BusinessProfile.find(businessFilter);
     const invoiceData = await InvoiceDetail.find(invoiceFilter);
 
 
-    return { userData, businessData, invoiceData };
+    return { clientData, businessData, invoiceData };
   } catch (error) {
     throw error;
   }
@@ -29,39 +29,39 @@ const fetchData = async (
 
 const generatePDF = async (req, res) => {
   try {
-    const userIdToGeneratePDF = req.query.userId;
+    const clientIdToGeneratePDF = req.query.clientId;
     const businessIdToGeneratePDF = req.query.businessId;
     const invoiceIdToGeneratePDF = req.query.invoiceId;
 
-    const generatedLink = `http://localhost:3010/pdf/generate?userId=${userIdToGeneratePDF}&businessId=${businessIdToGeneratePDF}&invoiceId=${invoiceIdToGeneratePDF}`;
+    const generatedLink = `?clientId=${clientIdToGeneratePDF}&businessId=${businessIdToGeneratePDF}&invoiceId=${invoiceIdToGeneratePDF}`;
 
     if (
-      !userIdToGeneratePDF ||
+      !clientIdToGeneratePDF ||
       !businessIdToGeneratePDF ||
       !invoiceIdToGeneratePDF
     ) {
       return res
         .status(400)
         .send(
-          "User ID, Business ID, and Invoice ID are required in the query parameters"
+          "client ID, Business ID, and Invoice ID are required in the query parameters"
         );
     }
 
-    const { userData, businessData, invoiceData } = await fetchData(
-      { _id: userIdToGeneratePDF },
+    const { clientData, businessData, invoiceData } = await fetchData(
+      { _id: clientIdToGeneratePDF },
       { _id: businessIdToGeneratePDF },
       { _id: invoiceIdToGeneratePDF }
     );
-   
+
 
     const combinedData = {
-      user: userData,
+      client: clientData,
       business: businessData,
       invoice: invoiceData,
     };
     const browser = await puppeteer.launch();
     const pdfBuffers = [];
-    for (const record of combinedData.user) {
+    for (const record of combinedData.client) {
       const page = await browser.newPage();
       const htmlPath = path.join(__dirname, "../views/template-pdf.html");
       const content = await page.setContent(
@@ -70,7 +70,7 @@ const generatePDF = async (req, res) => {
       await page.evaluate((generatedLink) => {
         document.getElementById("generatePdfLink").href = generatedLink;
       }, generatedLink);
-  
+
 
       await page.evaluate(
         (record, combinedData) => {
@@ -156,7 +156,6 @@ const generatePDF = async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 };
-
 module.exports = {
   generatePDF,
 };

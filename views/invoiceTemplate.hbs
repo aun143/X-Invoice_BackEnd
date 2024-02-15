@@ -18,14 +18,14 @@
   </head>
   <body>
     <div class="sender-section">
-      <p>{{sender}}</p>
+      <p>{{sender.firstName}}</p>
     </div>
     <div class="header">
 
       <h1>XInvoicely</h1>
     </div>
     <div class="container">
-      <p>Hi Dear! {{receiver}},</p>
+      <p>Hi Dear! {{receiver.firstName}},</p>
 
       <p>A new invoice has been generated from XInvoicely for you. Here's a
         quick summary:</p>
@@ -45,7 +45,7 @@
 <p>Click the following link: <a href="http://localhost:3010/pdf/generate?userId=65aa78568d6f3d1a7f909e1c&businessId=65ae51d686cd12e52252859d&invoiceId=65b35e67f7201b0951c95bfa" target="_blank">Generate PDF</a></p>
 
       <footer>
-        <p>Best regards, {{sender}}</p>
+        <p>Best regards, {{sender.firstName}}</p>
       </footer>
     </div>
   </body>

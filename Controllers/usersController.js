@@ -1,10 +1,10 @@
 const { userModel } = require("../Models/usersModel");
+const { hashPassword, generarteToken } = require("../helpers/user");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const comparePassword = async (plainPassword, hashedPassword) => {
   return await bcrypt.compare(plainPassword, hashedPassword);
 };
-const { hashPassword, generarteToken } = require("../helpers/user");
 
 const createUser = async (req, res) => {
   try {
@@ -17,10 +17,12 @@ const createUser = async (req, res) => {
 
     if (!user) {
       const data = await userModel.create(reqData);
+      // Generate token upon successful account creation
+      const token = generarteToken(data);
       return res.status(200).json({
         type: "success",
         message: `Account created successfully`,
-        data,
+        data: { data, access_token: token },
       });
     }
 
@@ -31,6 +33,33 @@ const createUser = async (req, res) => {
     throw error;
   }
 };
+
+
+// const createUser = async (req, res) => {
+//   try {
+//     const reqData = req.body;
+
+//     if (reqData.password) {
+//       reqData.password = await hashPassword(reqData.password);
+//     }
+//     const user = await userModel.findOne({ email: reqData.email });
+
+//     if (!user) {
+//       const data = await userModel.create(reqData);
+//       return res.status(200).json({
+//         type: "success",
+//         message: `Account created successfully`,
+//         data,
+//       });
+//     }
+
+//     return res
+//       .status(404)
+//       .json({ type: "bad", message: `email already exist!` });
+//   } catch (error) {
+//     throw error;
+//   }
+// };
 
 const LoginUser = async (req, res) => {
   try {

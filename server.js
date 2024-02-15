@@ -12,7 +12,7 @@ const pdfRoutes = require("./routes/pdfRoutes");
 const app = express();  
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "http://localhost:3010",
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true,
   })

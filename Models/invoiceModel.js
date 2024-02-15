@@ -58,9 +58,17 @@ const InvoiceSchema = new mongoose.Schema({
     enum: validStatusValues,
     required: false,
   },
+  // individualProfile: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: "BusinessProfile",
+  //   required: false,
+  //   default: null,
+  // },
 
-  reciever: {
+  receiver: {
     type: String,
+    ref: "ClienteDetail",
+    default: null,
     required: false,
   },
   notes: {
@@ -68,7 +76,9 @@ const InvoiceSchema = new mongoose.Schema({
     required: false,
   },
   sender: {
-    type: String,
+    type: Object,
+    ref: "BusinessProfile",
+    default: null,
     required: false,
   },
   subtotal: {
@@ -89,29 +99,29 @@ const InvoiceSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
-  items:[
- {   
-  description: {
-      type: String,
-      required: false,
-    },
-    quantity: {
-      type: Number,
-      required: false,
-    },
-    rate: {
-      type: Number,
-      required: false,
-    },
-    unit: {
-      type: String,
-      required: false,
-    },
-    amount: {
-      type: Number,
-      required: false,
-    },
-  }
+  items: [
+    {
+      description: {
+        type: String,
+        required: false,
+      },
+      quantity: {
+        type: Number,
+        required: false,
+      },
+      rate: {
+        type: Number,
+        required: false,
+      },
+      unit: {
+        type: String,
+        required: false,
+      },
+      amount: {
+        type: Number,
+        required: false,
+      },
+    }
   ],
 });
 

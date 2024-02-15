@@ -37,22 +37,50 @@ const createNewClient = async (req, res) => {
     });
   }
 };
-
 const getAllClient = async (req, res) => {
   try {
-    const user = req.user._id;
+    const userId = req.user._id;
 
-    const records = await ClientDetail.find({ user: user });
+    const allClient = await ClientDetail.find({ user: userId });
+    const page = parseInt(req.query.page) || 1; 
+    const pageSize = parseInt(req.query.pageSize) || 5; 
 
-    res.status(200).send(records);
+    const startIndex = (page - 1) * pageSize;
+    const endIndex = page * pageSize;
+
+    const paginatedRecords = allClient.slice(startIndex, endIndex);
+
+    res.status(200).send({
+      page,
+      pageSize,
+      totalItems: allClient.length, 
+      totalPages: Math.ceil(allClient.length / pageSize),
+      data: paginatedRecords,
+    });
   } catch (error) {
     res.status(500).send({
       message:
         error.message ||
-        "Some error occurred while retrieving business profiles.",
+        "Some error occurred while retrieving clients.",
     });
   }
 };
+
+// const getAllClient = async (req, res) => {
+//   try {
+    // const user = req.user._id;
+
+    // const records = await ClientDetail.find({ user: user });
+
+//     res.status(200).send(records);
+//   } catch (error) {
+//     res.status(500).send({
+//       message:
+//         error.message ||
+//         "Some error occurred while retrieving business profiles.",
+//     });
+//   }
+// };
 
 const getClientProfileById = async (req, res) => {
   try {
