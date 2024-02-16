@@ -8,10 +8,14 @@ const sendEmailFile = async (req, res) => {
         const invoice = await InvoiceDetail.findById(invoiceId);
 
         const data = {
-            receiver: invoice.reciever,
+            receiver: invoice.receiver,
             description: invoice.description,
-            quantity: invoice.quantity,
-            amount: invoice.amount,
+            invoiceNumber: invoice.invoiceNumber,
+            invoiceName: invoice.invoiceName,
+            PurchaseOrderNumber: invoice.purchaseOrderNumber,
+            // quantity: invoice.quantity,
+            // amount: invoice.amount,
+            paymentStatus: invoice.paymentStatus,
             total: invoice.total,
             invoiceDueDate: invoice.invoiceDueDate,
             invoiceLink: invoice.invoiceLink,

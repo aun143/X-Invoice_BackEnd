@@ -7,7 +7,10 @@ const {
   updateInvoice,
   updateInvoiceStatus,
   getSingleInvoice,
+  updateUnpaidInvoiceStatus,
 } = require("../Controllers/invoiveController");
+router.put("/updateInvoiceStatus/:id", updateInvoiceStatus);
+router.put("/updateUnpaidInvoiceStatus/:id", updateUnpaidInvoiceStatus);
 const { protectRoutes } = require("../Middleware/authMiddleware");
 
 router.use(protectRoutes);
@@ -17,7 +20,6 @@ router.get("/getAllInvoice", getAllInvoice);
 router.get("/getInvoice/:id", getSingleInvoice);
 router.delete("/deleteInvoice/:id", deleteInvoice);
 router.put("/updateInvoice/:id", updateInvoice);
-router.put("/updateInvoiceStatus/:id", updateInvoiceStatus);
 
 module.exports = {
   invoiceRouter: router,

@@ -14,6 +14,7 @@
       <div style="margin-right: -10px; display: flex; flex-direction: column">
         <p><strong>From</strong></p>
         <p><span id="firstNameFrom"></span></p>
+        <p><span id="lastNameFrom"></span></p>
         <p><span id="address1From"></span></p>
         <div style="display: flex; align-items: center">
           <p style="margin-right: 5px"><span id="postalCodeFrom"></span></p>
@@ -40,6 +41,7 @@
       <div>
         <p><strong>To</strong></p>
         <p><span id="firstNameTo"></span></p>
+        <p><span id="lastNameTo"></span></p>
         <p> <span id="address1To"></span></p>
         <div style="display: flex; align-items: center">
           <p style="margin-right: 5px"><span id="postalCodeTo"></span></p>
@@ -65,8 +67,8 @@
         <p><span>{{this.quantity}}</span></p>
         <p><strong>Rate:</strong></p>
         <p><span>{{this.rate}}</span></p>
-        <p><strong>Amount:</strong></p>
-        <p><span>{{this.amount}}</span></p>
+        <!-- <p><strong>Amount:</strong></p>
+        <p><span>{{this.amount}}</span></p> -->
       </div>
     {{/each}}
   
@@ -75,7 +77,7 @@
         <p><span>{{this.description}}</span></p>
         <p><span>{{this.quantity}}</span></p>
         <p><span>{{this.rate}}</span></p>
-        <p><span>{{this.amount}}</span></p>
+        <!-- <p><span>{{this.amount}}</span></p> -->
       </div>
     {{/each}}
   </div>
@@ -111,13 +113,14 @@
    <hr />
    <div style="display: flex; justify-content: space-between">
      <p><strong>Email:</strong>   <p><span id="email"></span></p></p>
+     <!-- <p><strong>Organization Name:</strong>   <p><span id="organizationNameFrom"></span></p></p> -->
    </div>
  
   </div>
 
-  <div style="text-align: center;">
+  <!-- <div style="text-align: center;">
     <p>Click the following link: <a id="generatePdfLink" href="#" target="_blank">Generate PDF</a></p>
-  </div>
+  </div> -->
   
   
   

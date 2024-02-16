@@ -77,8 +77,8 @@ const BusinessProfileSchema = new mongoose.Schema({
     type: Number,
     required: false,
   },
-  profileType:{
-    default:null,
+  profileType: {
+    default: null,
     type: String,
   }
 });

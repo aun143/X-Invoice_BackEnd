@@ -67,15 +67,17 @@ const generatePDF = async (req, res) => {
       const content = await page.setContent(
         require("fs").readFileSync(htmlPath, "utf8")
       );
-      await page.evaluate((generatedLink) => {
-        document.getElementById("generatePdfLink").href = generatedLink;
-      }, generatedLink);
+      // await page.evaluate((generatedLink) => {
+      //   document.getElementById("generatePdfLink").href = generatedLink;
+      // }, generatedLink);
 
 
       await page.evaluate(
         (record, combinedData) => {
           document.getElementById("firstNameTo").innerText =
-            record.firstName || "";
+            record.firstName || "";   
+            document.getElementById("lastNameTo").innerText =
+            record.lastName || "";
           document.getElementById("postalCodeTo").innerText =
             record.postalCode || "";
           document.getElementById("countryTo").innerText = record.country || "";
@@ -87,9 +89,13 @@ const generatePDF = async (req, res) => {
           const firstBusiness =
             businessInfo && businessInfo.length > 0 ? businessInfo[0] : {};
           document.getElementById("email").innerText =
-            firstBusiness.email || "";
+            firstBusiness.email || ""; 
           document.getElementById("firstNameFrom").innerText =
-            firstBusiness.firstName || "";
+            firstBusiness.firstName || ""; 
+            // document.getElementById("organizationNameFrom").innerText =
+            // firstBusiness.organizationName || ""; 
+              document.getElementById("lastNameFrom").innerText =
+            firstBusiness.lastName || "";
           document.getElementById("address1From").innerText =
             firstBusiness.address1 || "";
           document.getElementById("postalCodeFrom").innerText =
@@ -131,7 +137,6 @@ const generatePDF = async (req, res) => {
       <p><strong>Description:</strong> ${item.description || ""}</p>
       <p><strong>Quantity:</strong> ${item.quantity || ""}</p>
       <p><strong>Rate:</strong> ${item.rate || ""}</p>
-      <p><strong>Amount:</strong> ${item.amount || ""}</p>
     `;
               itemsContainer.appendChild(itemContainer);
             }

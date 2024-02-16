@@ -113,24 +113,49 @@ const LoginUser = async (req, res) => {
 //     throw error;
 //   }
 // };
-async function forgotPassword(req, res) {
+// async function forgotPassword(req, res) {
+//   const { email, newPassword } = req.body;
+//   //console.log("Request User", req.body);
+//   try {
+//     const user = await userModel.findOne({ email });
+//     if (!user) {
+//       return res.status(404).json({ message: "User not found" });
+//     }
+//     const hashedPassword = await bcrypt.hash(newPassword, 10);
+//     user.password = hashedPassword;
+//     await user.save();
+//     //console.log("user", user);
+//     res.status(200).json({ message: "Password updated successfully" });
+//   } catch (error) {
+//     //console.error(error);
+//     res.status(500).json({ message: "Internal Server Error" });
+//   }
+// }
+
+const forgotPassword = async (req, res) => {
   const { email, newPassword } = req.body;
-  //console.log("Request User", req.body);
   try {
     const user = await userModel.findOne({ email });
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
+
+    if (!newPassword) {
+      return res.status(400).json({ message: "New password is required" });
+    }
+
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     user.password = hashedPassword;
     await user.save();
-    //console.log("user", user);
-    res.status(200).json({ message: "Password updated successfully" });
+    return res.status(200).json({ message: "Password updated successfully",newPassword  });
   } catch (error) {
-    //console.error(error);
-    res.status(500).json({ message: "Internal Server Error" });
+    console.error(error);
+    return res.status(500).json({ message: "Internal Server Error" });
   }
-}
+};
+
+
+
 
 const getAllLoginUser = async (req, res) => {
   try {

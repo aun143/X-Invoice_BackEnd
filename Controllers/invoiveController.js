@@ -101,6 +101,35 @@ const updateInvoiceStatus = async (req, res) => {
     });
   }
 };
+const updateUnpaidInvoiceStatus = async (req, res) => {
+  try {
+    const invoiceId = req.params.id;
+    const updateData = req.body;
+
+    // Check if the provided status is a valid status value
+    if (updateData.status && !validStatusValues.includes(updateData.status)) {
+      return res.status(400).send({ message: "Invalid status value." });
+    }
+
+    const updatedinvoice = await InvoiceDetail.findByIdAndUpdate(
+      invoiceId,
+      updateData,
+      { new: true }
+    );
+
+    if (!updatedinvoice) {
+      return res.status(404).send({ message: "invoice not found for update." });
+    }
+
+    res.status(200).send(updatedinvoice);
+    //console.log("Updated invoice", updatedinvoice);
+  } catch (error) {
+    res.status(500).send({
+      message:
+        error.message || "Some error occurred while updating the Invoice .",
+    });
+  }
+};
 
 const updateInvoice = async (req, res) => {
   try {
@@ -132,5 +161,6 @@ module.exports = {
   getAllInvoice,
   deleteInvoice,
   updateInvoiceStatus,
+  updateUnpaidInvoiceStatus,
   updateInvoice,
 };
