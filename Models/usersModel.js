@@ -16,7 +16,6 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
-    match: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
   },
   individualProfile: {
     type: mongoose.Schema.Types.ObjectId,
@@ -31,6 +30,7 @@ const userSchema = new mongoose.Schema({
     default: null,
   },
 });
+
 const userModel = mongoose.model("user", userSchema);
 
 module.exports = { userModel };

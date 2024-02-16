@@ -5,6 +5,7 @@ const createInvoice = async (req, res) => {
   try {
     const user = req.user._id;
     req.body.user = user;
+    
     const newinvoice = await InvoiceDetail.create(req.body);
     res.status(200).send(newinvoice);
     //console.log("Newinvoice", newinvoice);

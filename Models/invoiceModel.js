@@ -58,12 +58,7 @@ const InvoiceSchema = new mongoose.Schema({
     enum: validStatusValues,
     required: false,
   },
-  // individualProfile: {
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   ref: "BusinessProfile",
-  //   required: false,
-  //   default: null,
-  // },
+
 
   receiver: {
     type: String,

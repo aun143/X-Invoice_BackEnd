@@ -1,42 +1,76 @@
 const { ClientDetail } = require("../Models/clinetModel");
 
-// const createNewClient = async (req, res) => {
-//   try {
-//     const user=req.user._id;
-//     req.body.user=user;
-//     const newRecord = await ClientDetail.create(req.body);
-
-//     res.status(200).send(newRecord);
-//     //console.log("Create ClientDetail ", newRecord);
-//   } catch (error) {
-//     res.status(500).send({
-//       message:
-//         error.message || "Some error occurred while creating the Invoice.",
-//     });
-//   }
-// };
-
 const createNewClient = async (req, res) => {
   try {
     const user = req.user._id;
     req.body.user = user;
 
-    // Determine the clientType based on the request body
+    if (!/^[a-zA-Z]+$/.test(req.body.firstName)) {
+      return res.status(400).json({ type: "bad", message: "firstName must contain only letters from A-Z and a-z" });
+    }
+
+    if (!/^[a-zA-Z]+$/.test(req.body.lastName)) {
+      return res.status(400).json({ type: "bad", message: "lastName must contain only letters from A-Z and a-z" });
+    }
+
+    if (!isValidEmail(req.body.email)) {
+      return res.status(400).json({ type: "bad", message: "Email must be valid and contain '@'" });
+    }
+
     const clientType = req.body.clientType;
+    
     if (!clientType || !["individual", "organization"].includes(clientType)) {
       return res.status(400).send({ message: "Invalid client type provided." });
     }
+
     console.log("clientType: ", clientType);
+    
     // Create the new client record
     const newRecord = await ClientDetail.create(req.body);
     res.status(200).send(newRecord);
   } catch (error) {
     res.status(500).send({
-      message:
-        error.message || "Some error occurred while creating the client.",
+      message: error.message || "Some error occurred while creating the client.",
     });
   }
 };
+
+
+function isValidEmail(email) {
+  const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  return emailRegex.test(email);
+}
+// const createNewClient = async (req, res) => {
+//   try {
+//     const user = req.user._id;
+//     req.body.user = user;
+
+
+//     // Determine the clientType based on the request body
+//     const clientType = req.body.clientType;
+//     if (!/^[a-zA-Z]+$/.test(profileBody.firstName)) {
+//       return res.status(400).json({ type: "bad", message: "firstName must contain only letters from A-Z and a-z" });
+//     }
+//     if (!/^[a-zA-Z]+$/.test(profileBody.lastName)) {
+//       return res.status(400).json({ type: "bad", message: "lastName must contain only letters from A-Z and a-z" });
+//     }
+//     if (!isValidEmail(profileBody.email)) {
+//       return res.status(400).json({ type: "bad", message: "Email must be valid and contain '@'" });
+//     }
+//     if (!clientType || !["individual", "organization"].includes(clientType)) {
+//       return res.status(400).send({ message: "Invalid client type provided." });
+//     }
+//     console.log("clientType: ", clientType);
+//     // Create the new client record
+//     const newRecord = await ClientDetail.create(req.body);
+//     res.status(200).send(newRecord);
+//   } catch (error) {
+//     res.status(500).send({
+//       message:
+//         error.message || "Some error occurred while creating the client.",
+//     });
+//   }
+// };
 const getAllClient = async (req, res) => {
   try {
     const userId = req.user._id;

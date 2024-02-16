@@ -9,6 +9,23 @@ const comparePassword = async (plainPassword, hashedPassword) => {
 const createUser = async (req, res) => {
   try {
     const reqData = req.body;
+    const requiredFields = ['username', 'password'];
+
+    for (const field of requiredFields) {
+      if (!reqData[field]) {
+        return res.status(400).json({ type: "bad", message: `${field.charAt(0).toUpperCase() + field.slice(1)} is required` });
+      }
+    }
+    if (!/^[a-zA-Z]+$/.test(reqData.username)) {
+      return res.status(400).json({ type: "bad", message: "Username must contain only letters from A-Z and a-z" });
+    }
+
+    if (!/^[a-zA-Z0-9]+$/.test(reqData.password)) {
+      return res.status(400).json({ type: "bad", message: "Password must contain only letters from A-Z and a-z" });
+    }
+    if (!isValidEmail(reqData.email)) {
+      return res.status(400).json({ type: "bad", message: "Email must be valid and contain '@' " });
+    }
 
     if (reqData.password) {
       reqData.password = await hashPassword(reqData.password);
@@ -33,33 +50,11 @@ const createUser = async (req, res) => {
     throw error;
   }
 };
+function isValidEmail(email) {
+  const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  return emailRegex.test(email);
+}
 
-
-// const createUser = async (req, res) => {
-//   try {
-//     const reqData = req.body;
-
-//     if (reqData.password) {
-//       reqData.password = await hashPassword(reqData.password);
-//     }
-//     const user = await userModel.findOne({ email: reqData.email });
-
-//     if (!user) {
-//       const data = await userModel.create(reqData);
-//       return res.status(200).json({
-//         type: "success",
-//         message: `Account created successfully`,
-//         data,
-//       });
-//     }
-
-//     return res
-//       .status(404)
-//       .json({ type: "bad", message: `email already exist!` });
-//   } catch (error) {
-//     throw error;
-//   }
-// };
 
 const LoginUser = async (req, res) => {
   try {
@@ -70,14 +65,11 @@ const LoginUser = async (req, res) => {
       return res.status(404).json({ type: "bad", message: `Invalid email ` });
     }
 
-    // Check if the provided password matches the stored password
     const isPasswordValid = await comparePassword(reqData.password, user.password);
 
     if (!isPasswordValid) {
       return res.status(404).json({ type: "bad", message: `Invalid  password!` });
     }
-
-    // If email and password are correct, generate a token
     const account = JSON.parse(JSON.stringify(user));
     const token = generarteToken(user);
 
@@ -92,45 +84,6 @@ const LoginUser = async (req, res) => {
 };
 
 
-// const LoginUser = async (req, res) => {
-//   try {
-//     const reqData = req.body;
-//     const user = await userModel.findOne({ email: reqData.email ,password: reqData.password });
-
-//     if (!user) {
-//       return res
-//         .status(404)
-//         .json({ type: "bad", message: `Invalid email or password!` });
-//     }
-//     const account = JSON.parse(JSON.stringify(user));
-//     const token = generarteToken(user);
-//     return res.status(200).json({
-//       type: "success",
-//       message: `Account Login successfull`,
-//       data: { ...account, access_token: token },
-//     });
-//   } catch (error) {
-//     throw error;
-//   }
-// };
-// async function forgotPassword(req, res) {
-//   const { email, newPassword } = req.body;
-//   //console.log("Request User", req.body);
-//   try {
-//     const user = await userModel.findOne({ email });
-//     if (!user) {
-//       return res.status(404).json({ message: "User not found" });
-//     }
-//     const hashedPassword = await bcrypt.hash(newPassword, 10);
-//     user.password = hashedPassword;
-//     await user.save();
-//     //console.log("user", user);
-//     res.status(200).json({ message: "Password updated successfully" });
-//   } catch (error) {
-//     //console.error(error);
-//     res.status(500).json({ message: "Internal Server Error" });
-//   }
-// }
 
 const forgotPassword = async (req, res) => {
   const { email, newPassword } = req.body;
@@ -147,7 +100,7 @@ const forgotPassword = async (req, res) => {
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     user.password = hashedPassword;
     await user.save();
-    return res.status(200).json({ message: "Password updated successfully",newPassword  });
+    return res.status(200).json({ message: "Password updated successfully", newPassword });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Internal Server Error" });

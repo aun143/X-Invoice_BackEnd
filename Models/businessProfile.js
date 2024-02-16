@@ -15,13 +15,11 @@ const BusinessProfileSchema = new mongoose.Schema({
   },
   email: {
     type: String,
-    required: false,
-    match: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
-
+    required: true,
   },
   phone: {
     type: Number,
-    required: false,
+    required: true,
   },
   address1: {
     type: String,

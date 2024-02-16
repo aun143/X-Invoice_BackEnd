@@ -4,8 +4,24 @@ const { userModel } = require("../Models/usersModel");
 const createBusinessProfile = async (req, res) => {
   try {
     const { userId, profileBody } = req.body;
+    const requiredFields = ['firstName', 'lastName', 'phone', 'email'];
+
+    for (const field of requiredFields) {
+      if (!profileBody[field]) {
+        return res.status(400).json({ type: "bad", message: `${field.charAt(0).toUpperCase() + field.slice(1)} is required` });
+      }
+    }
+    if (!/^[a-zA-Z]+$/.test(profileBody.firstName)) {
+      return res.status(400).json({ type: "bad", message: "firstName must contain only letters from A-Z and a-z" });
+    }
+    if (!/^[a-zA-Z]+$/.test(profileBody.lastName)) {
+      return res.status(400).json({ type: "bad", message: "lastName must contain only letters from A-Z and a-z" });
+    }
+    if (!isValidEmail(profileBody.email)) {
+      return res.status(400).json({ type: "bad", message: "Email must be valid and contain '@'" });
+    }
+
     const singleUser = await userModel.findById(userId);
-    // console.log("profileBody: is this>>",profileBody)
 
     if (
       singleUser &&
@@ -24,14 +40,13 @@ const createBusinessProfile = async (req, res) => {
 
       await singleUser.save();
 
-      // Populate individualProfile and organizationProfile in the response
       const populatedUser = await userModel
         .findById(userId)
         .populate("individualProfile")
         .populate("organizationProfile")
         .exec();
 
-      res.status(200).send(populatedUser);
+      return res.status(200).send(populatedUser);
     } else {
       return res.status(404).json({
         message:
@@ -39,13 +54,19 @@ const createBusinessProfile = async (req, res) => {
       });
     }
   } catch (error) {
-    res.status(500).send({
+    return res.status(500).send({
       message:
         error.message ||
         "Some error occurred while creating the business profile.",
     });
   }
 };
+
+function isValidEmail(email) {
+  const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  return emailRegex.test(email);
+}
+
 
 const getAllBusinessProfile = async (req, res) => {
   try {
