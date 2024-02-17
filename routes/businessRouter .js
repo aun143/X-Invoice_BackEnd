@@ -8,10 +8,11 @@ const {
   updateBusinessProfile,
   getBusinessProfileById,
 } = require("../Controllers/businessController");
-const { protectRoutes } = require("../Middleware/authMiddleware");
-router.post("/postbusinessProfile", createBusinessProfile);
 
+const { protectRoutes } = require("../Middleware/authMiddleware");
 router.use(protectRoutes);
+
+router.post("/postbusinessProfile", createBusinessProfile);
 router.get("/getallbusinessProfile", getAllBusinessProfile);
 router.delete("/deletebusinessProfile/:id", deleteBusinessProfile);
 router.put("/updatebusinessProfile/:id", updateBusinessProfile);

@@ -27,7 +27,7 @@ const sendEmailFile = async (req, res) => {
         res.status(200).json({ message: "Email Sent Successfully XInvoicely" });
     } catch (error) {
         console.log("Error sending email", error);
-        res.status(500).json({ message: "Error Sending Email XInvoicely", error });
+        res.status(500).json({ message: "Error Sending Email XInvoicely", error  });
     }
 };
 

@@ -74,7 +74,7 @@ const deleteInvoice = async (req, res) => {
   }
 };
 
-const updateInvoiceStatus = async (req, res) => {
+const updatePaidInvoiceStatus = async (req, res) => {
   try {
     const invoiceId = req.params.id;
     const updateData = req.body;
@@ -146,7 +146,7 @@ const updateInvoice = async (req, res) => {
     );
 
     if (!updatedinvoice) {
-      return res.status(404).send({ message: "invoice not found for update." });
+      return res.status(404).send({ message: "invoice not found for update. againt this Id " ,invoiceId});
     }
 
     res.status(200).send(updatedinvoice);
@@ -163,7 +163,7 @@ module.exports = {
   createInvoice,
   getInvoiceById,
   getAllInvoice,
-  updateInvoiceStatus,
+  updatePaidInvoiceStatus,
   updateUnpaidInvoiceStatus,
   updateInvoice,
   deleteInvoice,

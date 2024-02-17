@@ -5,11 +5,11 @@ const {
   getAllInvoice,
   deleteInvoice,
   updateInvoice,
-  updateInvoiceStatus,
+  updatePaidInvoiceStatus,
   getInvoiceById,
   updateUnpaidInvoiceStatus,
 } = require("../Controllers/invoiveController");
-router.put("/updateInvoiceStatus/:id", updateInvoiceStatus);
+router.put("/updatePaidInvoiceStatus/:id", updatePaidInvoiceStatus);
 router.put("/updateUnpaidInvoiceStatus/:id", updateUnpaidInvoiceStatus);
 const { protectRoutes } = require("../Middleware/authMiddleware");
 router.use(protectRoutes);

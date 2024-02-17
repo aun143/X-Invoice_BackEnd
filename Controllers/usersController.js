@@ -23,7 +23,7 @@ const createUser = async (req, res) => {
     if (reqData.password.length < 8 || !/^[a-zA-Z0-9!@#$%^&*]+$/.test(reqData.password)) {
       return res.status(400).json({ type: "bad", message: "Password must be at least 8 characters long and contain only letters from A-Z and a-z, digits from 0-9, and special characters" });
     }
-    
+
     if (!isValidEmail(reqData.email)) {
       return res.status(400).json({ type: "bad", message: "Email must be valid and contain '@' " });
     }
@@ -60,6 +60,13 @@ function isValidEmail(email) {
 const LoginUser = async (req, res) => {
   try {
     const reqData = req.body;
+    if (!reqData || !reqData.password || reqData.password.length < 8 || !/^[a-zA-Z0-9!@#$%^&*]+$/.test(reqData.password)) {
+      return res.status(400).json({ type: "bad", message: "Password must be at least 8 characters long and contain only letters from A-Z and a-z, digits from 0-9, and special characters" });
+    }
+
+    if (!isValidEmail(reqData.email)) {
+      return res.status(400).json({ type: "bad", message: "Email must be valid and contain '@' " });
+    }
     const user = await userModel.findOne({ email: reqData.email });
 
     if (!user) {
@@ -84,10 +91,15 @@ const LoginUser = async (req, res) => {
   }
 };
 
+function isValidEmail(email) {
+  const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  return emailRegex.test(email);
+}
+
 const forgotPassword = async (req, res) => {
   const { email, newPassword } = req.body;
   try {
-  
+
     const user = await userModel.findOne({ email });
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -98,11 +110,14 @@ const forgotPassword = async (req, res) => {
     if (!newPassword) {
       return res.status(400).json({ message: "New password is required" });
     }
+    // if (!isValidEmail(res.status.email)) {
+    //   return res.status(400).json({ type: "bad", message: "Email must be valid and contain '@' " });
+    // }
 
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
-    user.password = hashedPassword;
+    const newPasswordhashed = await bcrypt.hash(newPassword, 10);
+    user.password = newPasswordhashed;
     await user.save();
-    return res.status(200).json({ message: "Password updated successfully", newPassword });
+    return res.status(200).json({ message: "Password updated successfully", newPassword, newPasswordhashed });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Internal Server Error" });
@@ -164,7 +179,20 @@ const deleteUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   try {
-    
+    if (!/^[a-z A-Z]+$/.test(req.body.username)) {
+      return res.status(400).json({ type: "bad", message: "Username must contain only letters from A-Z and a-z no space allow" });
+    }
+
+    if (req.body.password.length < 8 || !/^[a-zA-Z0-9!@#$%^&*]+$/.test(req.body.password)) {
+      return res.status(400).json({ type: "bad", message: "Password must be at least 8 characters long and contain only letters from A-Z and a-z, digits from 0-9, and special characters" });
+    }
+
+    if (!isValidEmail(req.body.email)) {
+      return res.status(400).json({ type: "bad", message: "Email must be valid and contain '@' " });
+    }
+    if (req.body.password) {
+      req.body.password = await hashPassword(req.body.password);
+    }
     const recordId = req.params.id;
     const updateData = req.body;
 
