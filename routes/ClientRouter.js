@@ -1,20 +1,19 @@
 const express = require("express");
 const router = express.Router();
 const {
-  createNewClient,
+  createClient,
   getAllClient,
   deleteClient,
   updateClient,
-  getClientProfileById,
-} = require("../Controllers/clinetController");
+  getClientById,
+} = require("../Controllers/clientController");
 const { protectRoutes } = require("../Middleware/authMiddleware");
-
 router.use(protectRoutes);
 
 
-router.post("/createClient", createNewClient);
+router.post("/createClient", createClient);
 router.get("/getAllClient", getAllClient);
-router.get("/getClient/:id", getClientProfileById);
+router.get("/getClient/:id", getClientById);
 router.delete("/deleteClient/:id", deleteClient);
 router.put("/updateClient/:id", updateClient);
 

@@ -1,83 +1,59 @@
-const { ClientDetail } = require("../Models/clinetModel");
+const { ClientDetail } = require("../Models/clientModel");
 
-const createNewClient = async (req, res) => {
+const createClient = async (req, res) => {
   try {
-    const user = req.user._id;
-    req.body.user = user;
+    // Get the user ID from the authenticated user
+    const userId = req.user._id;
 
+    // Attach the user ID to the request body
+    req.body.user = userId;
+
+    // Validate first name
     if (!/^[a-zA-Z]+$/.test(req.body.firstName)) {
-      return res.status(400).json({ type: "bad", message: "firstName must contain only letters from A-Z and a-z" });
+      return res.status(400).json({ type: "bad", message: "First name must contain only letters from A-Z and a-z" });
     }
 
+    // Validate last name
     if (!/^[a-zA-Z]+$/.test(req.body.lastName)) {
-      return res.status(400).json({ type: "bad", message: "lastName must contain only letters from A-Z and a-z" });
+      return res.status(400).json({ type: "bad", message: "Last name must contain only letters from A-Z and a-z" });
     }
 
+    // Validate email
     if (!isValidEmail(req.body.email)) {
       return res.status(400).json({ type: "bad", message: "Email must be valid and contain '@'" });
     }
 
+    // Validate client type
     const clientType = req.body.clientType;
-    
     if (!clientType || !["individual", "organization"].includes(clientType)) {
       return res.status(400).send({ message: "Invalid client type provided." });
     }
 
-    console.log("clientType: ", clientType);
-    
     // Create the new client record
     const newRecord = await ClientDetail.create(req.body);
+
+    // Send the new record in the response
     res.status(200).send(newRecord);
   } catch (error) {
+    // Handle errors
     res.status(500).send({
       message: error.message || "Some error occurred while creating the client.",
     });
   }
 };
 
-
 function isValidEmail(email) {
   const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
   return emailRegex.test(email);
 }
-// const createNewClient = async (req, res) => {
-//   try {
-//     const user = req.user._id;
-//     req.body.user = user;
 
-
-//     // Determine the clientType based on the request body
-//     const clientType = req.body.clientType;
-//     if (!/^[a-zA-Z]+$/.test(profileBody.firstName)) {
-//       return res.status(400).json({ type: "bad", message: "firstName must contain only letters from A-Z and a-z" });
-//     }
-//     if (!/^[a-zA-Z]+$/.test(profileBody.lastName)) {
-//       return res.status(400).json({ type: "bad", message: "lastName must contain only letters from A-Z and a-z" });
-//     }
-//     if (!isValidEmail(profileBody.email)) {
-//       return res.status(400).json({ type: "bad", message: "Email must be valid and contain '@'" });
-//     }
-//     if (!clientType || !["individual", "organization"].includes(clientType)) {
-//       return res.status(400).send({ message: "Invalid client type provided." });
-//     }
-//     console.log("clientType: ", clientType);
-//     // Create the new client record
-//     const newRecord = await ClientDetail.create(req.body);
-//     res.status(200).send(newRecord);
-//   } catch (error) {
-//     res.status(500).send({
-//       message:
-//         error.message || "Some error occurred while creating the client.",
-//     });
-//   }
-// };
 const getAllClient = async (req, res) => {
   try {
     const userId = req.user._id;
 
     const allClient = await ClientDetail.find({ user: userId });
-    const page = parseInt(req.query.page) || 1; 
-    const pageSize = parseInt(req.query.pageSize) || 5; 
+    const page = parseInt(req.query.page) || 1;
+    const pageSize = parseInt(req.query.pageSize) || 5;
 
     const startIndex = (page - 1) * pageSize;
     const endIndex = page * pageSize;
@@ -87,7 +63,7 @@ const getAllClient = async (req, res) => {
     res.status(200).send({
       page,
       pageSize,
-      totalItems: allClient.length, 
+      totalItems: allClient.length,
       totalPages: Math.ceil(allClient.length / pageSize),
       data: paginatedRecords,
     });
@@ -100,23 +76,7 @@ const getAllClient = async (req, res) => {
   }
 };
 
-// const getAllClient = async (req, res) => {
-//   try {
-    // const user = req.user._id;
-
-    // const records = await ClientDetail.find({ user: user });
-
-//     res.status(200).send(records);
-//   } catch (error) {
-//     res.status(500).send({
-//       message:
-//         error.message ||
-//         "Some error occurred while retrieving business profiles.",
-//     });
-//   }
-// };
-
-const getClientProfileById = async (req, res) => {
+const getClientById = async (req, res) => {
   try {
     const profileId = req.params.id;
     const record = await ClientDetail.findById(profileId);
@@ -134,6 +94,7 @@ const getClientProfileById = async (req, res) => {
     });
   }
 };
+
 const deleteClient = async (req, res) => {
   try {
     const recordId = req.params.id;
@@ -155,8 +116,20 @@ const deleteClient = async (req, res) => {
     });
   }
 };
+
 const updateClient = async (req, res) => {
   try {
+    if (!req.body.firstName || !/^[a-z A-Z]+$/.test(req.body.firstName)) {
+      return res.status(400).json({ type: "bad", message: "firstName must contain only letters from A-Z and a-z" });
+    }
+
+    if (!req.body.lastName || !/^[a-z A-Z]+$/.test(req.body.lastName)) {
+      return res.status(400).json({ type: "bad", message: "lastName must contain only letters from A-Z and a-z" });
+    }
+
+    if (!isValidEmail(req.body.email)) {
+      return res.status(400).json({ type: "bad", message: "Email must be valid and contain '@'" });
+    }
     const recordId = req.params.id;
     const updateData = req.body;
 
@@ -181,10 +154,15 @@ const updateClient = async (req, res) => {
   }
 };
 
+function isValidEmail(email) {
+  const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  return emailRegex.test(email);
+}
+
 module.exports = {
-  createNewClient,
+  createClient,
   getAllClient,
-  getClientProfileById,
+  getClientById,
   deleteClient,
   updateClient,
 };

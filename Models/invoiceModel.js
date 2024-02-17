@@ -58,8 +58,6 @@ const InvoiceSchema = new mongoose.Schema({
     enum: validStatusValues,
     required: false,
   },
-
-
   receiver: {
     type: String,
     ref: "ClienteDetail",
@@ -89,7 +87,6 @@ const InvoiceSchema = new mongoose.Schema({
     type: Date,
     required: false,
   },
-
   invoiceName: {
     type: String,
     required: false,

@@ -3,7 +3,7 @@ const cors = require("cors");
 const { connectToDatabase } = require("./DataBase/dbConnection");
 const { usersRouter } = require("./routes/usersRouter");
 const { businessRouter } = require("./routes/businessRouter ");
-const { clientRouter } = require("./routes/ClientRouter");
+const { clientRouter } = require("./routes/clientRouter");
 const { invoiceRouter } = require("./routes/invoiceRouter");
 const { uploadRouter } = require("./routes/uploadRouter");
 const { emailRouter } = require("./routes/emailRouter");
@@ -20,6 +20,7 @@ app.use(
 
 require("dotenv").config();
 app.use(express.json());
+
 const PORT = process.env.PORT || 5000;
 
 connectToDatabase();

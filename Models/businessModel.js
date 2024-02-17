@@ -1,15 +1,8 @@
 const mongoose = require("mongoose");
 
-const ClientSchema = new mongoose.Schema({
- 
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "user",
-    required: true,
-  },
-  clientType: {
+const BusinessProfileSchema = new mongoose.Schema({
+  organizationName: {
     type: String,
-    enum: ["individual", "organization"],
     required: false,
   },
   firstName: {
@@ -22,30 +15,17 @@ const ClientSchema = new mongoose.Schema({
   },
   email: {
     type: String,
-    required: false,
+    required: true,
   },
-
   phone: {
     type: Number,
-    required: false,
-  }, faxNumber: {
-    type: Number,
-    required: false,
-  }, taxId: {
-    type: Number,
-    required: false,
+    required: true,
   },
   address1: {
     type: String,
     required: false,
-  },  notes: {
-    type: String,
-    required: false,
-  },  
+  },
   address2: {
-    type: String,
-    required: false,
-  },  websiteURL: {
     type: String,
     required: false,
   },
@@ -57,20 +37,50 @@ const ClientSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
-  postalCode: {
-    type: Number,
+  companyName: {
+    type: String,
     required: false,
   },
   country: {
     type: String,
     required: false,
   },
-   currency: {
+  websiteURL: {
     type: String,
     required: false,
   },
+  taxId: {
+    type: Number,
+    required: false,
+  },
+  notes: {
+    type: String,
+    required: false,
+  },
+  faxNumber: {
+    type: Number,
+    required: false,
+  },
+  customFieldName: {
+    type: String,
+    required: false,
+  },
+  customFieldValue: {
+    type: String,
+    required: false,
+  },
+  postalCode: {
+    type: Number,
+    required: false,
+  },
+  profileType: {
+    default: null,
+    type: String,
+  }
 });
 
-const ClientDetail = mongoose.model("ClienteDetail", ClientSchema);
-
-module.exports = { ClientDetail };
+const BusinessProfile = mongoose.model(
+  "BusinessProfile",
+  BusinessProfileSchema
+);
+module.exports = { BusinessProfile };

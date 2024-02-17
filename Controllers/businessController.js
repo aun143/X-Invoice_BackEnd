@@ -1,4 +1,4 @@
-const { BusinessProfile } = require("../Models/businessProfile");
+const { BusinessProfile } = require("../Models/businessModel");
 const { userModel } = require("../Models/usersModel");
 
 const createBusinessProfile = async (req, res) => {
@@ -11,10 +11,10 @@ const createBusinessProfile = async (req, res) => {
         return res.status(400).json({ type: "bad", message: `${field.charAt(0).toUpperCase() + field.slice(1)} is required` });
       }
     }
-    if (!/^[a-zA-Z]+$/.test(profileBody.firstName)) {
+    if (!/^[a-z A-Z]+$/.test(profileBody.firstName)) {
       return res.status(400).json({ type: "bad", message: "firstName must contain only letters from A-Z and a-z" });
     }
-    if (!/^[a-zA-Z]+$/.test(profileBody.lastName)) {
+    if (!/^[a-z A-Z]+$/.test(profileBody.lastName)) {
       return res.status(400).json({ type: "bad", message: "lastName must contain only letters from A-Z and a-z" });
     }
     if (!isValidEmail(profileBody.email)) {
@@ -66,7 +66,6 @@ function isValidEmail(email) {
   const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
   return emailRegex.test(email);
 }
-
 
 const getAllBusinessProfile = async (req, res) => {
   try {
@@ -128,6 +127,23 @@ const updateBusinessProfile = async (req, res) => {
   try {
     const recordId = req.params.id;
     const updateData = req.body;
+    const requiredFields = ['firstName', 'lastName', 'phone', 'email'];
+
+    for (const field of requiredFields) {
+      if (!updateData[field]) {
+        return res.status(400).json({ type: "bad", message: `${field.charAt(0).toUpperCase() + field.slice(1)} is required` });
+      }
+    }
+
+    if (!/^[a-z A-Z]+$/.test(updateData.firstName)) {
+      return res.status(400).json({ type: "bad", message: "First name must contain only letters from A-Z and a-z" });
+    }
+    if (!/^[a-z A-Z]+$/.test(updateData.lastName)) {
+      return res.status(400).json({ type: "bad", message: "Last name must contain only letters from A-Z and a-z" });
+    }
+    if (!isValidEmail(updateData.email)) {
+      return res.status(400).json({ type: "bad", message: "Email must be valid and contain '@'" });
+    }
 
     const updatedRecord = await BusinessProfile.findByIdAndUpdate(
       recordId,
@@ -140,20 +156,22 @@ const updateBusinessProfile = async (req, res) => {
     }
 
     res.status(200).send(updatedRecord);
-    // console.log("Updated Record", updatedRecord);
   } catch (error) {
     res.status(500).send({
-      message:
-        error.message ||
-        "Some error occurred while updating the business profile.",
+      message: error.message || "Some error occurred while updating the business profile."
     });
   }
 };
 
+function isValidEmail(email) {
+  const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  return emailRegex.test(email);
+}
+
 module.exports = {
   createBusinessProfile,
   getAllBusinessProfile,
-  deleteBusinessProfile,
-  updateBusinessProfile,
   getBusinessProfileById,
+  updateBusinessProfile,
+  deleteBusinessProfile,
 };

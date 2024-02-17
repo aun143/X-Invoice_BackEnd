@@ -3,9 +3,9 @@ const router = express.Router();
 const {
   createUser,
   forgotPassword,
-  getAllLoginUser,
-  deleteLoginUser,
-  updateLoginUser,
+  getAllUser,
+  deleteUser,
+  updateUser,
   LoginUser,
   getProfile,
 } = require("../Controllers/usersController");
@@ -13,10 +13,10 @@ const { protectRoutes } = require("../Middleware/authMiddleware");
 
 router.post("/createUser", createUser);
 router.post("/loginUser", LoginUser);
-router.get("/getLoginUser", getAllLoginUser);
+router.get("/getLoginUser", getAllUser);
 router.post("/userforgotpassword", forgotPassword);
-router.delete("/deleteLoginUser/:id", deleteLoginUser);
-router.put("/updateLoginUser/:id", updateLoginUser);
+router.delete("/deleteUser/:id", deleteUser);
+router.put("/updateUser/:id", updateUser);
 
 router.use(protectRoutes);
 router.get("/me", getProfile);

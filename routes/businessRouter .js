@@ -15,7 +15,7 @@ router.use(protectRoutes);
 router.get("/getallbusinessProfile", getAllBusinessProfile);
 router.delete("/deletebusinessProfile/:id", deleteBusinessProfile);
 router.put("/updatebusinessProfile/:id", updateBusinessProfile);
-router.get("/singleprofile/:id", getBusinessProfileById);
+router.get("/getBusinessProfile/:id", getBusinessProfileById);
 
 
 module.exports = {

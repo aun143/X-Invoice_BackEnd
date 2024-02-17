@@ -16,13 +16,14 @@ const createUser = async (req, res) => {
         return res.status(400).json({ type: "bad", message: `${field.charAt(0).toUpperCase() + field.slice(1)} is required` });
       }
     }
-    if (!/^[a-zA-Z]+$/.test(reqData.username)) {
-      return res.status(400).json({ type: "bad", message: "Username must contain only letters from A-Z and a-z" });
+    if (!/^[a-z A-Z]+$/.test(reqData.username)) {
+      return res.status(400).json({ type: "bad", message: "Username must contain only letters from A-Z and a-z no space allow" });
     }
 
-    if (!/^[a-zA-Z0-9]+$/.test(reqData.password)) {
-      return res.status(400).json({ type: "bad", message: "Password must contain only letters from A-Z and a-z" });
+    if (reqData.password.length < 8 || !/^[a-zA-Z0-9!@#$%^&*]+$/.test(reqData.password)) {
+      return res.status(400).json({ type: "bad", message: "Password must be at least 8 characters long and contain only letters from A-Z and a-z, digits from 0-9, and special characters" });
     }
+    
     if (!isValidEmail(reqData.email)) {
       return res.status(400).json({ type: "bad", message: "Email must be valid and contain '@' " });
     }
@@ -50,11 +51,11 @@ const createUser = async (req, res) => {
     throw error;
   }
 };
+
 function isValidEmail(email) {
   const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
   return emailRegex.test(email);
 }
-
 
 const LoginUser = async (req, res) => {
   try {
@@ -83,16 +84,17 @@ const LoginUser = async (req, res) => {
   }
 };
 
-
-
 const forgotPassword = async (req, res) => {
   const { email, newPassword } = req.body;
   try {
+  
     const user = await userModel.findOne({ email });
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-
+    if (newPassword.length < 8 || !/^[a-zA-Z0-9!@#$%^&*]+$/.test(newPassword)) {
+      return res.status(400).json({ type: "bad", message: "New password must be at least 8 characters long and contain only letters from A-Z and a-z, digits from 0-9, and special characters" });
+    }
     if (!newPassword) {
       return res.status(400).json({ message: "New password is required" });
     }
@@ -107,10 +109,7 @@ const forgotPassword = async (req, res) => {
   }
 };
 
-
-
-
-const getAllLoginUser = async (req, res) => {
+const getAllUser = async (req, res) => {
   try {
     const records = await userModel.find();
 
@@ -142,7 +141,7 @@ const getProfile = async (req, res) => {
   }
 };
 
-const deleteLoginUser = async (req, res) => {
+const deleteUser = async (req, res) => {
   try {
     const recordId = req.params.id;
     const deletedRecord = await userModel.findByIdAndDelete(recordId);
@@ -163,8 +162,9 @@ const deleteLoginUser = async (req, res) => {
   }
 };
 
-const updateLoginUser = async (req, res) => {
+const updateUser = async (req, res) => {
   try {
+    
     const recordId = req.params.id;
     const updateData = req.body;
 
@@ -190,10 +190,10 @@ const updateLoginUser = async (req, res) => {
 
 module.exports = {
   createUser,
-  forgotPassword,
-  getAllLoginUser,
-  deleteLoginUser,
-  updateLoginUser,
   LoginUser,
+  forgotPassword,
+  getAllUser,
   getProfile,
+  deleteUser,
+  updateUser,
 };

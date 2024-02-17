@@ -2,8 +2,8 @@ const puppeteer = require("puppeteer");
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 
-const { ClientDetail } = require("../Models/clinetModel");
-const { BusinessProfile } = require("../Models/businessProfile");
+const { ClientDetail } = require("../Models/clientModel");
+const { BusinessProfile } = require("../Models/businessModel");
 const { InvoiceDetail } = require("../Models/invoiceModel");
 
 const path = require("path");
@@ -75,8 +75,8 @@ const generatePDF = async (req, res) => {
       await page.evaluate(
         (record, combinedData) => {
           document.getElementById("firstNameTo").innerText =
-            record.firstName || "";   
-            document.getElementById("lastNameTo").innerText =
+            record.firstName || "";
+          document.getElementById("lastNameTo").innerText =
             record.lastName || "";
           document.getElementById("postalCodeTo").innerText =
             record.postalCode || "";
@@ -89,12 +89,12 @@ const generatePDF = async (req, res) => {
           const firstBusiness =
             businessInfo && businessInfo.length > 0 ? businessInfo[0] : {};
           document.getElementById("email").innerText =
-            firstBusiness.email || ""; 
+            firstBusiness.email || "";
           document.getElementById("firstNameFrom").innerText =
-            firstBusiness.firstName || ""; 
-            // document.getElementById("organizationNameFrom").innerText =
-            // firstBusiness.organizationName || ""; 
-              document.getElementById("lastNameFrom").innerText =
+            firstBusiness.firstName || "";
+          // document.getElementById("organizationNameFrom").innerText =
+          // firstBusiness.organizationName || ""; 
+          document.getElementById("lastNameFrom").innerText =
             firstBusiness.lastName || "";
           document.getElementById("address1From").innerText =
             firstBusiness.address1 || "";

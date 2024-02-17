@@ -17,6 +17,24 @@ const createInvoice = async (req, res) => {
   }
 };
 
+const getInvoiceById = async (req, res) => {
+  try {
+    const invoiceId = req.params.id;
+    const invoice = await InvoiceDetail.findById(invoiceId);
+    if (!invoice) {
+      return res.status(404).json({
+        message: "Invoive Not  found with This id " , invoiceId,
+      });
+    }
+    res.status(200).json(invoice);
+  } catch (error) {
+    console.error("Error retrieving Invoive: ", error);
+    res.status(500).json({
+      message: "Internal server error while retrieving the Invoive.",
+    });
+  }
+};
+
 const getAllInvoice = async (req, res) => {
   try {
     const user =req.user._id;
@@ -31,23 +49,6 @@ const getAllInvoice = async (req, res) => {
     res.status(500).send({
       message:
         error.message || "Some error occurred while retrieving Invoice .",
-    });
-  }
-};
-const getSingleInvoice = async (req, res) => {
-  try {
-    const invoiceId = req.params.id;
-    const invoice = await InvoiceDetail.findById(invoiceId);
-    if (!invoice) {
-      return res.status(404).json({
-        message: "Invoive Not  found with This id " , invoiceId,
-      });
-    }
-    res.status(200).json(invoice);
-  } catch (error) {
-    console.error("Error retrieving Invoive: ", error);
-    res.status(500).json({
-      message: "Internal server error while retrieving the Invoive.",
     });
   }
 };
@@ -102,6 +103,7 @@ const updateInvoiceStatus = async (req, res) => {
     });
   }
 };
+
 const updateUnpaidInvoiceStatus = async (req, res) => {
   try {
     const invoiceId = req.params.id;
@@ -156,12 +158,13 @@ const updateInvoice = async (req, res) => {
     });
   }
 };
+
 module.exports = {
   createInvoice,
-  getSingleInvoice,
+  getInvoiceById,
   getAllInvoice,
-  deleteInvoice,
   updateInvoiceStatus,
   updateUnpaidInvoiceStatus,
   updateInvoice,
+  deleteInvoice,
 };
