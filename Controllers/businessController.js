@@ -4,7 +4,7 @@ const { userModel } = require("../Models/usersModel");
 const createBusinessProfile = async (req, res) => {
   try {
     const { userId, profileBody } = req.body;
-    const requiredFields = ['firstName', 'lastName', 'phone', 'email'];
+    const requiredFields = ['firstName', 'lastName', 'address1', 'city', 'country', 'email'];
 
     for (const field of requiredFields) {
       if (!profileBody[field]) {
@@ -20,7 +20,24 @@ const createBusinessProfile = async (req, res) => {
     if (!isValidEmail(profileBody.email)) {
       return res.status(400).json({ type: "bad", message: "Email must be valid and contain '@'" });
     }
-
+    if (!/^[a-z A-Z 0-9]+$/.test(profileBody.address1)) {
+      return res.status(400).json({ type: "bad", message: "Address must contain only letters from A-Z and a-z" });
+    }
+    if (!/^[a-z A-Z 0-9]+$/.test(profileBody.address2)) {
+      return res.status(400).json({ type: "bad", message: "Address must contain only letters from A-Z and a-z" });
+    }
+    if (!/^[a-z A-Z]+$/.test(profileBody.city)) {
+      return res.status(400).json({ type: "bad", message: "City must contain only letters from A-Z and a-z" });
+    }
+    if (!/^[a-z A-Z]+$/.test(profileBody.companyName)) {
+      return res.status(400).json({ type: "bad", message: "CompanyName must contain only letters from A-Z and a-z" });
+    }
+    // if (!/^[a-z A-Z ]+$/.test(profileBody.this.state)) {
+    //   return res.status(400).json({ type: "bad", message: "State must contain only letters from A-Z and a-z" });
+    // }
+    // if (!isValidUrl(profileBody.this.websiteURL)) {
+    //   return res.status(400).json({ type: "bad", message: "Website URL is not valid." });
+    // }
     const singleUser = await userModel.findById(userId);
 
     if (
@@ -67,6 +84,15 @@ function isValidEmail(email) {
   return emailRegex.test(email);
 }
 
+// function isValidUrl(string) {
+//   try {
+//     new URL(string);
+//     return true;
+//   } catch (_) {
+//     return false;
+//   }
+// }
+
 const getAllBusinessProfile = async (req, res) => {
   try {
     const records = await BusinessProfile.find();
@@ -112,7 +138,7 @@ const deleteBusinessProfile = async (req, res) => {
         .send({ message: "Record not found for deletion." });
     }
 
-    res.status(200).send(deletedRecord);
+    return res.status(200).json({ message: "Successfully deleted record of the BusinessProfile", recordId });
     // console.log("Deleted Record", deletedRecord);
   } catch (error) {
     res.status(500).send({
@@ -143,6 +169,19 @@ const updateBusinessProfile = async (req, res) => {
     }
     if (!isValidEmail(updateData.email)) {
       return res.status(400).json({ type: "bad", message: "Email must be valid and contain '@'" });
+    }
+    
+    if (!/^[a-z A-Z 0-9]+$/.test(profileBody.address1)) {
+      return res.status(400).json({ type: "bad", message: "Address must contain only letters from A-Z and a-z" });
+    }
+    if (!/^[a-z A-Z 0-9]+$/.test(profileBody.address2)) {
+      return res.status(400).json({ type: "bad", message: "Address must contain only letters from A-Z and a-z" });
+    }
+    if (!/^[a-z A-Z]+$/.test(profileBody.city)) {
+      return res.status(400).json({ type: "bad", message: "City must contain only letters from A-Z and a-z" });
+    }
+    if (!/^[a-z A-Z]+$/.test(profileBody.companyName)) {
+      return res.status(400).json({ type: "bad", message: "CompanyName must contain only letters from A-Z and a-z" });
     }
 
     const updatedRecord = await BusinessProfile.findByIdAndUpdate(

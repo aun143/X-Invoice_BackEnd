@@ -19,11 +19,11 @@ const BusinessProfileSchema = new mongoose.Schema({
   },
   phone: {
     type: Number,
-    required: true,
+    required: false,
   },
   address1: {
     type: String,
-    required: false,
+    required: true,
   },
   address2: {
     type: String,
@@ -31,7 +31,7 @@ const BusinessProfileSchema = new mongoose.Schema({
   },
   city: {
     type: String,
-    required: false,
+    required: true,
   },
   state: {
     type: String,
@@ -43,7 +43,7 @@ const BusinessProfileSchema = new mongoose.Schema({
   },
   country: {
     type: String,
-    required: false,
+    required: true,
   },
   websiteURL: {
     type: String,

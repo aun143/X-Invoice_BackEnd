@@ -2,40 +2,38 @@ const { ClientDetail } = require("../Models/clientModel");
 
 const createClient = async (req, res) => {
   try {
-    // Get the user ID from the authenticated user
     const userId = req.user._id;
 
-    // Attach the user ID to the request body
     req.body.user = userId;
 
-    // Validate first name
-    if (!/^[a-zA-Z]+$/.test(req.body.firstName)) {
+    if (!/^[a-z A-Z]+$/.test(req.body.firstName)) {
       return res.status(400).json({ type: "bad", message: "First name must contain only letters from A-Z and a-z" });
     }
-
-    // Validate last name
-    if (!/^[a-zA-Z]+$/.test(req.body.lastName)) {
+    if (!/^[a-z A-Z]+$/.test(req.body.lastName)) {
       return res.status(400).json({ type: "bad", message: "Last name must contain only letters from A-Z and a-z" });
     }
-
-    // Validate email
     if (!isValidEmail(req.body.email)) {
       return res.status(400).json({ type: "bad", message: "Email must be valid and contain '@'" });
     }
-
-    // Validate client type
+    if (!/^[a-z A-Z]+$/.test(req.body.address1)) {
+      return res.status(400).json({ type: "bad", message: "Address1 name must contain only letters from A-Z and a-z" });
+    }   
+    if (!/^[a-z A-Z]+$/.test(req.body.address2)) {
+      return res.status(400).json({ type: "bad", message: "Address2 name must contain only letters from A-Z and a-z" });
+    } 
+    if (!/^[a-z A-Z]+$/.test(req.body.city)) {
+      return res.status(400).json({ type: "bad", message: "City name must contain only letters from A-Z and a-z" });
+    } if (!/^[a-z A-Z]+$/.test(req.body.state)) {
+      return res.status(400).json({ type: "bad", message: "State name must contain only letters from A-Z and a-z" });
+    }
     const clientType = req.body.clientType;
     if (!clientType || !["individual", "organization"].includes(clientType)) {
       return res.status(400).send({ message: "Invalid client type provided." });
     }
-
-    // Create the new client record
     const newRecord = await ClientDetail.create(req.body);
 
-    // Send the new record in the response
     res.status(200).send(newRecord);
   } catch (error) {
-    // Handle errors
     res.status(500).send({
       message: error.message || "Some error occurred while creating the client.",
     });
@@ -106,7 +104,7 @@ const deleteClient = async (req, res) => {
         .send({ message: "Record not found for deletion." });
     }
 
-    res.status(200).send(deletedRecord);
+    return res.status(200).json({ message: "Successfully deleted record of the ClientDetail",recordId });
     //console.log("Deleted Record", deletedRecord);
   } catch (error) {
     res.status(500).send({
@@ -129,6 +127,19 @@ const updateClient = async (req, res) => {
 
     if (!isValidEmail(req.body.email)) {
       return res.status(400).json({ type: "bad", message: "Email must be valid and contain '@'" });
+    }
+    
+    if (!/^[a-z A-Z]+$/.test(req.body.address1)) {
+      return res.status(400).json({ type: "bad", message: "Address1 name must contain only letters from A-Z and a-z" });
+    }   
+    if (!/^[a-z A-Z]+$/.test(req.body.address2)) {
+      return res.status(400).json({ type: "bad", message: "Address2 name must contain only letters from A-Z and a-z" });
+    } 
+    if (!/^[a-z A-Z]+$/.test(req.body.city)) {
+      return res.status(400).json({ type: "bad", message: "City name must contain only letters from A-Z and a-z" });
+    }
+     if (!/^[a-z A-Z]+$/.test(req.body.state)) {
+      return res.status(400).json({ type: "bad", message: "State name must contain only letters from A-Z and a-z" });
     }
     const recordId = req.params.id;
     const updateData = req.body;

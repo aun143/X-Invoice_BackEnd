@@ -2,6 +2,7 @@ const { userModel } = require("../Models/usersModel");
 const { hashPassword, generarteToken } = require("../helpers/user");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+
 const comparePassword = async (plainPassword, hashedPassword) => {
   return await bcrypt.compare(plainPassword, hashedPassword);
 };
@@ -162,17 +163,13 @@ const deleteUser = async (req, res) => {
     const deletedRecord = await userModel.findByIdAndDelete(recordId);
 
     if (!deletedRecord) {
-      return res
-        .status(404)
-        .send({ message: "Record not found for deletion." });
+      return res.status(404).json({ message: "The record you're trying to delete does not exist." });
     }
 
-    res.status(200).send(deletedRecord);
-    //console.log("Deleted Record", deletedRecord);
+    return res.status(200).json({ message: "Successfully deleted record of the user",recordId });
   } catch (error) {
-    res.status(500).send({
-      message:
-        error.message || "Some error occurred while deleting the User profile.",
+    res.status(500).json({
+      message: error.message || "An error occurred while deleting the record.",
     });
   }
 };

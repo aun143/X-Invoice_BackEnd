@@ -64,7 +64,7 @@ const deleteInvoice = async (req, res) => {
         .send({ message: "invoice not found for deletion." });
     }
 
-    res.status(200).send(deletedinvoice);
+    return res.status(200).json({ message: "Successfully deleted record of the InvoiveDetail",invoiceId });
     //console.log("Deleted invoice", deletedinvoice);
   } catch (error) {
     res.status(500).send({

@@ -1,129 +1,215 @@
+
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>User Information PDF</title>
-  </head>
-  <body>
- <div style="margin: 40px;">
-  <h3>INVOICE</h3>
-  <p><span id="description"></span></p>
-  <div style="display: flex; justify-content: space-between; padding: 10px">
-    <div style="display: flex; justify-content: space-between">
-      <div style="margin-right: -10px; display: flex; flex-direction: column">
-        <p><strong>From</strong></p>
-        <p><span id="firstNameFrom"></span></p>
-        <p><span id="lastNameFrom"></span></p>
-        <p><span id="address1From"></span></p>
-        <div style="display: flex; align-items: center">
-          <p style="margin-right: 5px"><span id="postalCodeFrom"></span></p>
-          <p><span id="cityFrom"></span></p>
-        </div>
-        <p><span id="countryFrom"></span></p>
-      </div>
 
-      <div style="margin-left: 180px">
-        <p><strong>Invoice No.:</strong> <span id="invoiceNumber"></p>
-        <p><strong>Date:</strong>  <span id="date"></p>
-          </div>
-    </div>
-  </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User Information PDF</title>
+  <style>
+    
+  #itemsContainer {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    margin-top: 20px;
+  }
 
-  <div style="display: flex; justify-content: space-between; padding: 10px">
-    <div
-      style="
-        display: flex;
-        justify-content: space-between;
-        margin-right: -10px;
-      "
-    >
-      <div>
-        <p><strong>To</strong></p>
-        <p><span id="firstNameTo"></span></p>
-        <p><span id="lastNameTo"></span></p>
-        <p> <span id="address1To"></span></p>
-        <div style="display: flex; align-items: center">
-          <p style="margin-right: 5px"><span id="postalCodeTo"></span></p>
-          <p><span id="cityTo"></span></p>
-        </div>
-        <p> <span id="countryTo"></span></p>
+  #itemsContainer > div {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    margin-bottom: 10px; 
+  }
 
-      </div>
-      <div style="margin-left: 150px">
-        <p><strong>Purchase Order Number:</strong>  <span id="purchaseOrderNumber"></p>
-        <p><strong>Invoice Due.:</strong><span id="invoiceDueDate"> </p>
-      </div>
-    </div>
-  </div>
-
-  <hr />
-  <div id="itemsContainer" style="display: flex; justify-content: space-between;">
-    {{#each items}}
-      <div >
-        <p><strong>Description:</strong></p>
-        <p><span>{{this.description}}</span></p>
-        <p><strong>Quantity:</strong></p>
-        <p><span>{{this.quantity}}</span></p>
-        <p><strong>Rate:</strong></p>
-        <p><span>{{this.rate}}</span></p>
-        <!-- <p><strong>Amount:</strong></p>
-        <p><span>{{this.amount}}</span></p> -->
-      </div>
-    {{/each}}
-  
-    {{#each items}}
-      <div>
-        <p><span>{{this.description}}</span></p>
-        <p><span>{{this.quantity}}</span></p>
-        <p><span>{{this.rate}}</span></p>
-        <!-- <p><span>{{this.amount}}</span></p> -->
-      </div>
-    {{/each}}
-  </div>
-  
-
-
-  <hr />
-
-  <div
-    style="display: flex; justify-content: space-between; margin-left: 200px"
-  >
-  <div style="text-align: left">
-    <p><strong>Subtotal:</strong></p>
-    <p><strong>Total:</strong></p>
-    <p><strong>Paid to Date:</strong></p>
-    <p style="text-align: center; background-color: gray; padding: 10px">
-      Balance
-    </p>
-  </div>
-
-  <div style="text-align: right">
-    <p><span id="subtotal"></span></p>
-    <p><span id="total"></span></p>
-    <p><span id="invoiceDueDate"></span></p>
-    <p><span id="balance"></span></p>
-  </div>
-  
-  </div>
-   <div>
-    <p><strong>Invoice Notes</strong></p>
-    <p><span id="notes"></span></p>
-   </div> 
-   <hr />
-   <div style="display: flex; justify-content: space-between">
-     <p><strong>Email:</strong>   <p><span id="email"></span></p></p>
-     <!-- <p><strong>Organization Name:</strong>   <p><span id="organizationNameFrom"></span></p></p> -->
-   </div>
  
+
+  #itemsContainer > div >  p {
+    margin: 5px 0;
+  }
+
+  #itemsContainer > div > p > strong {
+    margin:6px 0px;
+    display: flex;
+    width: 100px; 
+  }
+
+  #itemsContainer > div >  p > span {
+    display: inline-block;
+  }
+    .container {
+      margin: 40px;
+    }
+
+    .section {
+      display: flex;
+      justify-content: space-between;
+      flex-direction: row;
+    }
+
+    .section-left,
+    .section-right {
+      width: 50%;
+    }
+
+    .section-left {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .section-right {
+      margin:6%  20px;
+      text-align: right;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+span{
+      margin-top: 3px;
+
+}
+    th,
+    td {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+
+    th {
+      background-color: #f2f2f2;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div style="margin: 40px;">
+    <h3>INVOICE</h3>
+    <p><span id="description"></span></p>
+  <div class="section">
+    <div class="section-left">
+      <p><strong>From:</strong></p>
+     <p> <span id="firstNameFrom"></span>
+      <span id="lastNameFrom"></span>
+  <span id="address1From"></span>
+    <span id="postalCodeFrom"></span> <span id="cityFrom"></span>
+    <span id="countryFrom"></span></p>
+    </div>
+    <div class="section-right">
+      <p><strong>Invoice No.:</strong> <span id="invoiceNumber"></span></p>
+      <p><strong>Date:</strong> <span id="date"></span></p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-left">
+      <p><strong>To:</strong></p>
+ <span id="firstNameTo"></span>
+ <span id="lastNameTo"></span>
+  <span id="address1To"></span>
+<span id="postalCodeTo"></span> <span id="cityTo"></span>
+   <span id="countryTo"></span></p>
+    </div>
+    <div class="section-right">
+      <p><strong>Purchase Order Number:</strong> <span id="purchaseOrderNumber"></span></p>
+      <p><strong>Invoice Due:</strong> <span id="invoiceDueDate"></span></p>
+    </div>
+  </div>
+
+    <hr />
+    <div id="itemsContainer" >
+   <table>
+  <thead>
+    <tr>
+      <th>Description</th>
+      <th>Quantity</th>
+      <th>Rate</th>
+   
+    <th>Amount</th> 
+    </tr>
+  </thead>
+  <tbody>
+    {{#each items}}
+    <tr>
+      <td>{{this.description}}</td>
+      <td>{{this.quantity}}</td>
+      <td>{{this.rate}}</td>
+   <td>{{this.amount}}</td> 
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+
+    </div>
+<!-- <div id="itemsContainer" style="display: flex; justify-content: space-between; flex-direction: column;">
+  {{#each items}}
+  <div style="display: flex; flex-direction: row;">
+ <strong>Description:</strong>
+ <strong>Quantity:</strong>
+ <strong>Rate:</strong>
+  </div>
+  {{/each}}
+
+  {{#each items}}
+  <div style="display: flex; flex-direction: row;">
+<span>{{this.description}}</span>
+ <span>{{this.quantity}}</span>
+  <span>{{this.rate}}</span>
+
+  </div>
+  {{/each}}
+</div> -->
+
+
+    <hr />
+
+    <div style="display: flex; justify-content: space-between; margin-left: 200px">
+      <div style="text-align: left">
+        <p><strong>Subtotal:</strong></p>
+        <p><strong>Total:</strong></p>
+        <p><strong>Paid to Date:</strong></p>
+        <p style="text-align: center; background-color: gray; padding: 10px">
+          Balance
+        </p>
+      </div>
+
+      <div style="text-align: right">
+        <p><span id="subtotal"></span></p>
+        <p><span id="total"></span></p>
+        <p><span id="invoiceDueDate"></span></p>
+        <p><span id="balance"></span></p>
+      </div>
+
+    </div>
+    <div>
+      <p><strong>Invoice Notes</strong></p>
+      <p><span id="notes"></span></p>
+    </div>
+    <hr />
+    <div style="display: flex; justify-content: space-between">
+      <p><strong>Email:</strong>
+      <p><span id="email"></span></p>
+      </p>
+      <!-- <p><strong>Organization Name:</strong>   <p><span id="organizationNameFrom"></span></p></p> -->
+    </div>
+
   </div>
 
   <!-- <div style="text-align: center;">
     <p>Click the following link: <a id="generatePdfLink" href="#" target="_blank">Generate PDF</a></p>
   </div> -->
-  
+
+
+
+
+
   </div>
 
- </div>
-  </body>
+  </div>
+</body>
+
 </html>
