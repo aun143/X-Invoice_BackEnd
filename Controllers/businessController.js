@@ -21,8 +21,8 @@ const createBusinessProfile = async (req, res) => {
       return res.status(400).json({ type: "bad", message: "Email must be valid and contain '@'" });
     }
     if (!/^[a-z A-Z 0-9]+$/.test(profileBody.address1)) {
-      return res.status(400).json({ type: "bad", message: "Address1 must contain only letters from A-Z and a-z" });
-    }
+      return res.status(400).json({ type: "bad", message: "Address1 must contain only letters and numbers." });
+  }
     if (!/^[a-z A-Z 0-9]+$/.test(profileBody.address2)) {
       return res.status(400).json({ type: "bad", message: "Address2 must contain only letters from A-Z and a-z" });
     }
