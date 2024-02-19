@@ -132,11 +132,13 @@ const generatePDF = async (req, res) => {
             itemsContainer.innerHTML = "";
 
             for (const item of firstinvoiceInfo.items) {
+              
               const itemContainer = document.createElement("div");
               itemContainer.innerHTML = `
-      <p><strong>Description:</strong> ${item.description || ""}</p>
-      <p><strong>Quantity:</strong> ${item.quantity || ""}</p>
-      <p><strong>Rate:</strong> ${item.rate || ""}</p>
+     <div> <p><p> ${item.description || ""}</p></p></div>
+     <div  > <p>${item.quantity || ""}</p></div>
+     <div> <p>${item.rate || ""}</p></div>
+     <div > <p>${item.amount || ""}</p></div> 
     `;
               itemsContainer.appendChild(itemContainer);
             }

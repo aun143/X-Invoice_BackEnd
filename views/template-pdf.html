@@ -1,42 +1,42 @@
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>User Information PDF</title>
   <style>
     
-  #itemsContainer {
+  /* #itemsContainer {
     display: flex;
     justify-content: space-between;
     flex-direction: column;
     margin-top: 20px;
-  }
+  } */
 
   #itemsContainer > div {
     display: flex;
     justify-content: space-between;
     flex-direction: row;
-    margin-bottom: 10px; 
+    max-width:100%;
+    margin-bottom: 2px;   
   }
 
- 
+  #itemsContainer > div >  p >p {
+    
+    margin: 50px 0;
+    max-width:25%;
 
-  #itemsContainer > div >  p {
-    margin: 5px 0;
   }
 
-  #itemsContainer > div > p > strong {
+  /* #itemsContainer > div > p > strong {
     margin:6px 0px;
     display: flex;
     width: 100px; 
-  }
+  } */
 
-  #itemsContainer > div >  p > span {
+  /* #itemsContainer > div >  p > span {
     display: inline-block;
-  }
+  } */
     .container {
       margin: 40px;
     }
@@ -50,6 +50,7 @@
     .section-left,
     .section-right {
       width: 50%;
+      
     }
 
     .section-left {
@@ -59,7 +60,7 @@
 
     .section-right {
       margin:6%  20px;
-      text-align: right;
+      text-align: left;
     }
 
     table {
@@ -68,10 +69,10 @@
       display: flex;
       flex-direction: column;
     }
-span{
+    span{
       margin-top: 3px;
 
-}
+    }
     th,
     td {
       border: 1px solid #dddddd;
@@ -94,12 +95,14 @@ span{
     <div class="section-left">
       <p><strong>From:</strong></p>
      <p> <span id="firstNameFrom"></span>
-      <span id="lastNameFrom"></span>
-  <span id="address1From"></span>
-    <span id="postalCodeFrom"></span> <span id="cityFrom"></span>
+      <span id="lastNameFrom"></span><br>
+  <span id="address1From"></span><br>
+    <span id="postalCodeFrom"></span> <span id="cityFrom"></span><br>
     <span id="countryFrom"></span></p>
     </div>
+
     <div class="section-right">
+      <!-- <img src="../assets/multipleperson.png" alt="no Logo"> -->
       <p><strong>Invoice No.:</strong> <span id="invoiceNumber"></span></p>
       <p><strong>Date:</strong> <span id="date"></span></p>
     </div>
@@ -107,12 +110,11 @@ span{
 
   <div class="section">
     <div class="section-left">
-      <p><strong>To:</strong></p>
- <span id="firstNameTo"></span>
- <span id="lastNameTo"></span>
-  <span id="address1To"></span>
-<span id="postalCodeTo"></span> <span id="cityTo"></span>
-   <span id="countryTo"></span></p>
+      <p><strong>To:</strong></p><p>
+ <span id="firstNameTo"></span> <span id="lastNameTo"></span><br>
+  <span id="address1To"></span><br>
+<span id="postalCodeTo"></span> <span id="cityTo"></span><br>
+   <span id="countryTo"></span></p><br>
     </div>
     <div class="section-right">
       <p><strong>Purchase Order Number:</strong> <span id="purchaseOrderNumber"></span></p>
@@ -120,16 +122,19 @@ span{
     </div>
   </div>
 
-    <hr />
-    <div id="itemsContainer" >
-   <table>
-  <thead>
+    <hr /><div style="display: flex; justify-content: space-between;">
+    <p><strong>Description</strong></p>
+    <p><strong>Quantity</strong></p>
+    <p><strong>Rate</strong></p>
+    <p><strong>Amount</strong></p></div>
+    <p id="itemsContainer" >
+   <!-- <table> -->
+  <!-- <thead>
     <tr>
       <th>Description</th>
       <th>Quantity</th>
       <th>Rate</th>
-   
-    <th>Amount</th> 
+      <th>Amount</th> 
     </tr>
   </thead>
   <tbody>
@@ -138,13 +143,13 @@ span{
       <td>{{this.description}}</td>
       <td>{{this.quantity}}</td>
       <td>{{this.rate}}</td>
-   <td>{{this.amount}}</td> 
+      <td>{{this.amount}}</td> 
     </tr>
     {{/each}}
   </tbody>
-</table>
+</table> -->
 
-    </div>
+    </p>
 <!-- <div id="itemsContainer" style="display: flex; justify-content: space-between; flex-direction: column;">
   {{#each items}}
   <div style="display: flex; flex-direction: row;">
@@ -173,7 +178,9 @@ span{
         <p><strong>Total:</strong></p>
         <p><strong>Paid to Date:</strong></p>
         <p style="text-align: center; background-color: gray; padding: 10px">
-          Balance
+          <strong>
+          Balance:
+          </strong>
         </p>
       </div>
 
@@ -186,11 +193,11 @@ span{
 
     </div>
     <div>
-      <p><strong>Invoice Notes</strong></p>
+      <p><strong>Invoice Notes:</strong></p>
       <p><span id="notes"></span></p>
     </div>
     <hr />
-    <div style="display: flex; justify-content: space-between">
+    <div style="display: flex">
       <p><strong>Email:</strong>
       <p><span id="email"></span></p>
       </p>
@@ -203,13 +210,7 @@ span{
     <p>Click the following link: <a id="generatePdfLink" href="#" target="_blank">Generate PDF</a></p>
   </div> -->
 
-
-
-
-
   </div>
-
   </div>
 </body>
-
 </html>
