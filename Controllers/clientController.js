@@ -15,12 +15,12 @@ const createClient = async (req, res) => {
     if (!isValidEmail(req.body.email)) {
       return res.status(400).json({ type: "bad", message: "Email must be valid and contain '@'" });
     }
-    if (!/^[a-z A-Z]+$/.test(req.body.address1)) {
-      return res.status(400).json({ type: "bad", message: "Address1 name must contain only letters from A-Z and a-z" });
+    if (!/^[a-z A-Z 0-9]+$/.test(req.body.address1)) {
+      return res.status(400).json({ type: "bad", message: "Address1 name must contain only letters from A-Z and a-z and 0-9" });
     }   
-    if (!/^[a-z A-Z]+$/.test(req.body.address2)) {
-      return res.status(400).json({ type: "bad", message: "Address2 name must contain only letters from A-Z and a-z" });
-    } 
+    // if (!/^[a-z A-Z 0-9]+$/.test(req.body.address2)) {
+    //   return res.status(400).json({ type: "bad", message: "Address2 name must contain only letters from A-Z and a-z and 0-9" });
+    // } 
     if (!/^[a-z A-Z]+$/.test(req.body.city)) {
       return res.status(400).json({ type: "bad", message: "City name must contain only letters from A-Z and a-z" });
     } if (!/^[a-z A-Z]+$/.test(req.body.state)) {
@@ -51,7 +51,7 @@ const getAllClient = async (req, res) => {
 
     const allClient = await ClientDetail.find({ user: userId });
     const page = parseInt(req.query.page) || 1;
-    const pageSize = parseInt(req.query.pageSize) || 5;
+    const pageSize = parseInt(req.query.pageSize) || 10;
 
     const startIndex = (page - 1) * pageSize;
     const endIndex = page * pageSize;
@@ -132,15 +132,19 @@ const updateClient = async (req, res) => {
     if (!/^[a-z A-Z 0-9]+$/.test(req.body.address1)) {
       return res.status(400).json({ type: "bad", message: "Address1 name must contain only letters from A-Z and a-z" });
     }   
-    if (!/^[a-z A-Z 0-9]+$/.test(req.body.address2)) {
-      return res.status(400).json({ type: "bad", message: "Address2 name must contain only letters from A-Z and a-z" });
-    } 
+    // if (!/^[a-z A-Z 0-9]+$/.test(req.body.address2)) {
+    //   return res.status(400).json({ type: "bad", message: "Address2 name must contain only letters from A-Z and a-z" });
+    // } 
     if (!/^[a-z A-Z]+$/.test(req.body.city)) {
       return res.status(400).json({ type: "bad", message: "City name must contain only letters from A-Z and a-z" });
     }
      if (!/^[a-z A-Z]+$/.test(req.body.state)) {
       return res.status(400).json({ type: "bad", message: "State name must contain only letters from A-Z and a-z" });
     }
+    // if (!req.body.organizationName || !/^[a-z A-Z]+$/.test(req.body.organizationName)) {
+    //   return res.status(400).json({ type: "bad", message: "OrganizationName must contain only letters from A-Z and a-z" });
+    // }
+
     const recordId = req.params.id;
     const updateData = req.body;
 
