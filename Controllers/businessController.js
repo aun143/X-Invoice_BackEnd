@@ -153,7 +153,7 @@ const updateBusinessProfile = async (req, res) => {
   try {
     const recordId = req.params.id;
     const updateData = req.body;
-    const requiredFields = ['firstName', 'lastName', 'phone', 'email'];
+    const requiredFields = ['firstName', 'lastName',  'email'];
 
     for (const field of requiredFields) {
       if (!updateData[field]) {

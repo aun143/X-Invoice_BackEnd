@@ -12,7 +12,10 @@ const ClientSchema = new mongoose.Schema({
     enum: ["individual", "organization"],
     required: false,
   },
-  firstName: {
+  organizationName: {
+    type: String,
+    required: false,
+  },firstName: {
     type: String,
     required: true,
   },

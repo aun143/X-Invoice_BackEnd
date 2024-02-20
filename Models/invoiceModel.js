@@ -20,7 +20,7 @@ const InvoiceSchema = new mongoose.Schema({
     required: false,
   },
   invoiceDueDate: {
-    type: Number,
+    type: Date,
     required: false,
   },
   purchaseOrderNumber: {
@@ -59,7 +59,7 @@ const InvoiceSchema = new mongoose.Schema({
     required: false,
   },
   receiver: {
-    type: String,
+    type: Object,
     ref: "ClienteDetail",
     default: null,
     required: false,
@@ -74,8 +74,12 @@ const InvoiceSchema = new mongoose.Schema({
     default: null,
     required: false,
   },
-  subtotal: {
+ subtotal: {
     type: Number,
+    required: false,
+  }, 
+  logoPreview: {
+    type: String,
     required: false,
   },
   total: {

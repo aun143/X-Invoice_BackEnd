@@ -59,7 +59,7 @@
     }
 
     .section-right {
-      margin:6%  20px;
+      margin:2%  20px;
       text-align: left;
     }
 
@@ -84,6 +84,16 @@
       background-color: #f2f2f2;
       text-align: center;
     }
+    #paymentStatus {
+    padding: 10px 20px;
+    font-weight: bold;
+    border: 1px solid black;
+    font-size: 12px;
+    border-radius: 5px;
+}
+
+
+
   </style>
 </head>
 
@@ -102,9 +112,9 @@
     </div>
 
     <div class="section-right">
-      <!-- <img src="../assets/multipleperson.png" alt="no Logo"> -->
-      <p><strong>Invoice No.:</strong> <span id="invoiceNumber"></span></p>
-      <p><strong>Date:</strong> <span id="date"></span></p>
+      <!-- <img src="./3x.png" alt="no Logo"> -->
+      <p ><strong >Invoice No.:</strong> <br> <span id="invoiceNumber"></span></p>
+      <p><strong>Date:</strong><br> <span id="date"></span></p>
     </div>
   </div>
 
@@ -117,8 +127,8 @@
    <span id="countryTo"></span></p><br>
     </div>
     <div class="section-right">
-      <p><strong>Purchase Order Number:</strong> <span id="purchaseOrderNumber"></span></p>
-      <p><strong>Invoice Due:</strong> <span id="invoiceDueDate"></span></p>
+      <p><strong>Purchase Order Number:</strong><br> <span id="purchaseOrderNumber"></span></p>
+      <p><strong>Invoice Due:</strong><br> <span id="invoiceDueDate"></span></p>
     </div>
   </div>
 
@@ -178,9 +188,13 @@
         <p><strong>Total:</strong></p>
         <p><strong>Paid to Date:</strong></p>
         <p style="text-align: center; background-color: gray; padding: 10px">
-          <strong>
-          Balance:
-          </strong>
+        
+            <strong
+            id="paymentStatus">
+              Balance:
+              </strong>
+        
+        
         </p>
       </div>
 
@@ -212,5 +226,6 @@
 
   </div>
   </div>
+
 </body>
 </html>
