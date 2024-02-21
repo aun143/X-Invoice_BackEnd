@@ -1,3 +1,3 @@
-const api= require('../server')
+const api= require('../src/app.js')
 
 module.exports= api

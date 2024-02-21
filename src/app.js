@@ -1,14 +1,14 @@
 const express = require("express");
 const bodyParser = require('body-parser');
 const cors = require("cors");
-const { connectToDatabase } = require("./src/DataBase/dbConnection");
-const { usersRouter } = require("./src/routes/usersRouter");
-const { businessRouter } = require("./src/routes/businessRouter ");
-const { clientRouter } = require("./src/routes/clientRouter");
-const { invoiceRouter } = require("./src/routes/invoiceRouter");
-const { uploadRouter } = require("./src/routes/uploadRouter");
-const { emailRouter } = require("./src/routes/emailRouter");
-const pdfRoutes = require("./src/routes/pdfRoutes");
+const { connectToDatabase } = require("./DataBase/dbConnection");
+const { usersRouter } = require("./routes/usersRouter");
+const { businessRouter } = require("./routes/businessRouter ");
+const { clientRouter } = require("./routes/clientRouter");
+const { invoiceRouter } = require("./routes/invoiceRouter");
+const { uploadRouter } = require("./routes/uploadRouter");
+const { emailRouter } = require("./routes/emailRouter");
+const pdfRoutes = require("./routes/pdfRoutes");
 
 const app = express();  
 app.use(
