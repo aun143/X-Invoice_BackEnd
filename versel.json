@@ -1,3 +1,20 @@
-{
-    "rewrites": [{ "source": "/(.*)", "destination": "/api" }]
-}
+
+  {
+    "version": 2,
+    "builds": [
+      {
+        "src": "./server.js",
+        "use": "@vercel/node"
+      }
+    ],
+    "routes": [
+      { "src": "/login", "dest": "/controllers/usersController.js" },
+      { "src": "/business", "dest": "/controllers/businessController.js" },
+      { "src": "/client", "dest": "/controllers/clientController.js" },
+      { "src": "/invoices", "dest": "/controllers/invoiceController.js" },
+      { "src": "/upload", "dest": "/controllers/uploadController.js" },
+      { "src": "/email", "dest": "/controllers/emailController.js" },
+      { "src": "/pdf", "dest": "/controllers/pdfController.js" },
+      { "src": "/(.*)", "dest": "/controllers/server.js" }
+    ],
+  "rewrites": [{ "source": "/(.*)", "destination": "/" }] }
