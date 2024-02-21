@@ -1,5 +1,6 @@
 {
     "version": 2,
+    "builds":[{"src":"./server.js","use":"@versel/node"}],
     "routes": [
       { "src": "/login", "dest": "/controllers/usersController.js" },
       { "src": "/business", "dest": "/controllers/businessController.js" },
