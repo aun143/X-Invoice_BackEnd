@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "@vercel/node": "^3.0.19",
     "axios": "^1.6.5",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
@@ -23,11 +22,10 @@
   },
   "name": "invoice",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "start": "nodemon ./api/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "versel-build":"echo Hello" 
+    "start": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
