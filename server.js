@@ -43,6 +43,7 @@ app.use("/invoices", invoiceRouter);
 app.use("/upload", uploadRouter);
 app.use("/email", emailRouter);
 app.use("/pdf", pdfRoutes);
+app.use('*', (req, res) => res.send('up and running...'))
 
 app.listen(PORT, () => {
   console.log("Server listening on port".blue, PORT.toString().green);
