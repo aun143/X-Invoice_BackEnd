@@ -48,3 +48,5 @@ app.use('*', (req, res) => res.send('up and running...'))
 app.listen(PORT, () => {
   console.log("Server listening on port".blue, PORT.toString().green);
 });
+
+module.exports = app;
