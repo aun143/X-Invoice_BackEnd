@@ -39,7 +39,7 @@ app.use("/email", emailRouter);
 app.use("/pdf", pdfRoutes);
 app.use('*', (req, res) => res.send('X-Invoice Backend Routing Not Found'))
 
-const PORT = process.env.PORT || 9002;
+const PORT = process.env.PORT || 9001;
 app.listen(PORT, () => {
   console.log("Server listening on port".blue, PORT.toString().green);
 });
