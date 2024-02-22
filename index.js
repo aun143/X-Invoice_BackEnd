@@ -10,14 +10,9 @@ const { uploadRouter } = require("./src/routes/uploadRouter");
 const { emailRouter } = require("./src/routes/emailRouter");
 const pdfRoutes = require("./src/routes/pdfRoutes");
 
-const app = express();  
-app.use(
-  cors({
-    origin: "http://localhost:5173",
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    credentials: true,
-  })
-);
+const app = express();
+
+app.use(cors());
 
 app.use((err, req, res, next) => {
   if (err.name === 'CORSError') {
@@ -27,7 +22,7 @@ app.use((err, req, res, next) => {
   }
 });
 app.use(bodyParser.json({ limit: '50mb' })); // Adjust the limit as needed
-app.use(bodyParser.urlencoded({ limit: '50mb', extended: true })); 
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
 require("dotenv").config();
 app.use(express.json());
@@ -48,5 +43,3 @@ app.use('*', (req, res) => res.send('up and running...'))
 app.listen(PORT, () => {
   console.log("Server listening on port".blue, PORT.toString().green);
 });
-
-module.exports = app;
