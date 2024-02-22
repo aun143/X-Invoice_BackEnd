@@ -8,7 +8,11 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "install": "set PUPPETEER_SKIP_DOWNLOAD=true && npm install"
+  },
+  "puppeteer": {
+    "skipDownload": true
   },
   "keywords": [],
   "author": "",
