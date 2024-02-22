@@ -1,6 +1,6 @@
 
 const express = require("express");
-const { imageHandler } = require("../Controllers/uploadController");
+const { imageHandler } = require("../controllers/uploadController");
 // const { protectRoutes } = require("../Middleware/authMiddleware");
 const router = express.Router();
 

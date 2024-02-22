@@ -8,8 +8,8 @@ const {
   updateUser,
   LoginUser,
   getProfile,
-} = require("../Controllers/usersController");
-const { protectRoutes } = require("../Middleware/authMiddleware");
+} = require("../controllers/usersController");
+const { protectRoutes } = require("../middleware/authMiddleware");
 
 router.post("/createUser", createUser);
 router.post("/loginUser", LoginUser);

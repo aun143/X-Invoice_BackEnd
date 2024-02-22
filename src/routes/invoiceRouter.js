@@ -8,11 +8,11 @@ const {
   updatePaidInvoiceStatus,
   getInvoiceById,
   updateUnpaidInvoiceStatus,
-} = require("../Controllers/invoiveController");
+} = require("../controllers/invoiveController");
 router.put("/updatePaidInvoiceStatus/:id", updatePaidInvoiceStatus);
 router.put("/updateUnpaidInvoiceStatus/:id", updateUnpaidInvoiceStatus);
 router.put("/updateInvoice/:id", updateInvoice);
-const { protectRoutes } = require("../Middleware/authMiddleware");
+const { protectRoutes } = require("../middleware/authMiddleware");
 router.use(protectRoutes);
 
 router.post("/createInvoice", createInvoice);

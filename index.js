@@ -1,7 +1,7 @@
 const express = require("express");
 const bodyParser = require('body-parser');
 const cors = require("cors");
-const { connectToDatabase } = require("./src/DataBase/dbConnection");
+const { connectToDatabase } = require("./src/database/dbConnection");
 const { usersRouter } = require("./src/routes/usersRouter");
 const { businessRouter } = require("./src/routes/businessRouter ");
 const { clientRouter } = require("./src/routes/clientRouter");

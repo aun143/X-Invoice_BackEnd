@@ -1,4 +1,4 @@
-const { InvoiceDetail } = require("../Models/invoiceModel");
+const { InvoiceDetail } = require("../models/invoiceModel");
 const validStatusValues = ["pending", "paid", "unpaid"];
 
 const createInvoice = async (req, res) => {

@@ -1,5 +1,5 @@
-const { BusinessProfile } = require("../Models/businessModel");
-const { userModel } = require("../Models/usersModel");
+const { BusinessProfile } = require("../models/businessModel");
+const { userModel } = require("../models/usersModel");
 
 const createBusinessProfile = async (req, res) => {
   try {

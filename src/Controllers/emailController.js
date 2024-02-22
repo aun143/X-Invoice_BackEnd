@@ -1,6 +1,6 @@
 
-const emailModel = require("../Models/emailModel");
-const { InvoiceDetail } = require("../Models/invoiceModel");
+const emailModel = require("../models/emailModel");
+const { InvoiceDetail } = require("../models/invoiceModel");
 
 const sendEmailFile = async (req, res) => {
     const { to, subject, invoiceId } = req.body;

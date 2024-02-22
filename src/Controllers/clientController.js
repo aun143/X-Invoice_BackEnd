@@ -1,4 +1,4 @@
-const { ClientDetail } = require("../Models/clientModel");
+const { ClientDetail } = require("../models/clientModel");
 
 const createClient = async (req, res) => {
   try {

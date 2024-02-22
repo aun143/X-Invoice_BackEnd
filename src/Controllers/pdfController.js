@@ -2,9 +2,9 @@ const puppeteer = require("puppeteer");
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 
-const { ClientDetail } = require("../Models/clientModel");
-const { BusinessProfile } = require("../Models/businessModel");
-const { InvoiceDetail } = require("../Models/invoiceModel");
+const { ClientDetail } = require("../models/clientModel");
+const { BusinessProfile } = require("../models/businessModel");
+const { InvoiceDetail } = require("../models/invoiceModel");
 
 const path = require("path");
 const axios = require("axios");

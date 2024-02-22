@@ -6,8 +6,8 @@ const {
   deleteClient,
   updateClient,
   getClientById,
-} = require("../Controllers/clientController");
-const { protectRoutes } = require("../Middleware/authMiddleware");
+} = require("../controllers/clientController");
+const { protectRoutes } = require("../middleware/authMiddleware");
 router.use(protectRoutes);
 
 

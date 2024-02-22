@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { sendEmailFile } = require("../Controllers/emailController");
+const { sendEmailFile } = require("../controllers/emailController");
 // const { protectRoutes } = require("../Middleware/authMiddleware");
 
 // router.use(protectRoutes);
