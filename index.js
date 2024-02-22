@@ -14,20 +14,18 @@ const app = express();
 
 app.use(cors());
 
-app.use((err, req, res, next) => {
-  if (err.name === 'CORSError') {
-    res.status(403).json({ error: 'CORS error: Origin not allowed' });
-  } else {
-    next(err);
-  }
-});
+// app.use((err, req, res, next) => {
+//   if (err.name === 'CORSError') {
+//     res.status(403).json({ error: 'CORS error: Origin not allowed' });
+//   } else {
+//     next(err);
+//   }
+// });
 app.use(bodyParser.json({ limit: '50mb' })); // Adjust the limit as needed
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
 require("dotenv").config();
 app.use(express.json());
-
-const PORT = process.env.PORT || 5000;
 
 connectToDatabase();
 
@@ -40,6 +38,7 @@ app.use("/email", emailRouter);
 app.use("/pdf", pdfRoutes);
 app.use('*', (req, res) => res.send('up and running...'))
 
+const PORT = process.env.PORT || 9002;
 app.listen(PORT, () => {
   console.log("Server listening on port".blue, PORT.toString().green);
 });
