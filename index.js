@@ -1,4 +1,3 @@
-require("dotenv").config();
 const express = require("express");
 const bodyParser = require('body-parser');
 const cors = require("cors");
@@ -14,6 +13,7 @@ const pdfRoutes = require("./src/routes/pdfRoutes");
 const app = express();
 
 app.use(cors());
+require("dotenv").config();
 
 // app.use((err, req, res, next) => {
 //   if (err.name === 'CORSError') {
