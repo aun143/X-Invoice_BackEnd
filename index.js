@@ -8,7 +8,7 @@ const { clientRouter } = require("./routes/clientRouter");
 const { invoiceRouter } = require("./routes/invoiceRouter");
 const { uploadRouter } = require("./routes/uploadRouter");
 const { emailRouter } = require("./routes/emailRouter");
-const pdfRoutes = require("./routes/pdfRoutes");
+// const pdfRoutes = require("./routes/pdfRoutes");
 
 const app = express();
 
@@ -36,7 +36,7 @@ app.use("/client", clientRouter);
 app.use("/invoices", invoiceRouter);
 app.use("/upload", uploadRouter);
 app.use("/email", emailRouter);
-app.use("/pdf", pdfRoutes);
+// app.use("/pdf", pdfRoutes);
 app.use('*', (req, res) => res.send('X-Invoice Backend Routing Not Found'))
 
 const PORT = process.env.PORT || 9001;
