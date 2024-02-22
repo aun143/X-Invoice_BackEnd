@@ -11,5 +11,8 @@
       "src": "/(.*)",
       "dest": "/"
     }
-  ]
+  ],
+  "env": {
+    "PUPPETEER_SKIP_DOWNLOAD": "true"
+  }
 }
