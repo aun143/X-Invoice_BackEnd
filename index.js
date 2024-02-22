@@ -36,7 +36,7 @@ app.use("/invoices", invoiceRouter);
 app.use("/upload", uploadRouter);
 app.use("/email", emailRouter);
 app.use("/pdf", pdfRoutes);
-app.use('*', (req, res) => res.send('up and running...'))
+app.use('*', (req, res) => res.send('X-Invoice Backend Routing Not Found'))
 
 const PORT = process.env.PORT || 9002;
 app.listen(PORT, () => {
