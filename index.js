@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const bodyParser = require('body-parser');
 const cors = require("cors");
@@ -24,7 +25,7 @@ app.use(cors());
 app.use(bodyParser.json({ limit: '50mb' })); // Adjust the limit as needed
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
-require("dotenv").config();
+
 app.use(express.json());
 
 connectToDatabase();
